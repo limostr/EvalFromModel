@@ -131,7 +131,8 @@ class CompEvaluation
 
 
     public function setIn($varname,$value){
-        $var = explode(":",$varname);
+        $UID=str_ireplace(array("}","{"),"",$varname);
+        $var = explode(":",$UID);
 
         if(count($var)==2) {
             if($var[1][0]=="@"){
@@ -140,7 +141,7 @@ class CompEvaluation
             }
         }else{
             $ChaineAccess="";
-          //  print_r($var);
+           //  print_r($var);
             $this->setInSpecificObject($var,0,$ChaineAccess,$value);
         }
     }
@@ -177,7 +178,9 @@ class CompEvaluation
             case "AutreInformations":
                 $key=str_replace("@","",$var[$i+1]);
                 $ChaineAcces.="->_AutreInformations->{$key}";
-
+               /// echo "\$this$ChaineAcces='$valeur'=;";
+                eval("\$this$ChaineAcces='$valeur';");
+                $i+=1;
                 break;
             case "Model":
                 $next_request=$var[$i+1];
@@ -223,34 +226,47 @@ class CompEvaluation
                 if($var[$i][0]=="@"){
                     $key=str_replace("@","",$var[$i]);
                     $obj=null;
-                    eval("\$obj=\$this$ChaineAcces;");
+
+                    //echo("\$obj=\$this$ChaineAcces;<br>");
+
+                     eval("\$obj=\$this$ChaineAcces;");
                     if(!empty($ChaineAcces)  && is_array($obj)){
                         foreach ($obj as $keyp => $Pval){
                             $ChaineAcces2=$ChaineAcces;
-                            //$this->setInSpecificObject($var,$i+1,$ChaineAcces2,$valeur);
+                             $this->setInSpecificObject($var,$i+1,$ChaineAcces2,$valeur);
                         }
                     }elseif(isset($obj)  && $obj instanceof CompEvaluation){
-                            $ChaineAcces.="->_RecordEval";
-                            if($obj && method_exists($obj ,"set$key")){
-                                eval("\$this$ChaineAcces->{'set$key'}($valeur);");
 
+                            $ChaineAcces.="->_RecordEval";
+
+                        eval("\$obj=\$this$ChaineAcces;");
+                           // print_r(get_class_methods($obj));
+                             if( method_exists($obj ,"set$key")){
+                               // echo get_class($obj)."set$key"."<br>";
+                              //  echo "\$this$ChaineAcces->{'set$key'}($valeur);<br>";
+                                eval("\$this$ChaineAcces->{'set$key'}($valeur);");
+                              //  eval("echo \$this$ChaineAcces->{'get$key'}().'eeeeee';");
                             }
                     }else{
+
+                       // echo "\$this$ChaineAcces->{'set$key'}($valeur);";
                         if($obj && method_exists($obj ,"set$key")){
-                            eval("\$this$ChaineAcces->{'set$key'}($valeur);");
-                            echo "\$this$ChaineAcces->{'set$key'}($valeur);";
+                            eval("\$this$ChaineAcces->{'set$key'}('$valeur');");
+                        }else{
+                            eval("\$this$ChaineAcces->{'$key'}('$valeur');");
                         }
+
                     }
                 }elseif($var[$i][0]=="#"){
                     $key=str_replace("#","",$var[$i]);
-                    echo "\$this$ChaineAcces->{'set$key'}($valeur);<br>";
+                  //  echo "\$this$ChaineAcces[$key]=$valeur;<br>";
                     eval("\$this$ChaineAcces[$key]=$valeur;");
                 }
 
                 break;
 
         }
-        //echo "<b style='color: deeppink;'>$ChaineAcces</b><br>";
+      //echo "<b style='color: deeppink;'>$ChaineAcces</b><br>";
 
         $i+=1;
         if($i< count($var)){
@@ -260,8 +276,8 @@ class CompEvaluation
     }
 
      public function lookForVariable($varname){
-        
 
+        $varname=str_ireplace(array("}","{"),"",$varname);
         $var = explode(":",$varname);
         $valeurFinal=null;
         if(count($var)>0){
@@ -284,7 +300,11 @@ class CompEvaluation
                     break;
                     case "AutreInformations":
                         $key=str_replace("@","",$var[$i+1]);
-                        $valeurFinal=$Pointeur=$Pointeur->_AutreInformations->{"$key"};
+                      //  echo "<b style='color:darkred'>$key</b>";
+                        if(isset($Pointeur->_AutreInformations->{"$key"})){
+                            $valeurFinal=$Pointeur=$Pointeur->_AutreInformations->{"$key"};
+                        }
+
                         $i++;
 
                     break;
@@ -374,6 +394,15 @@ class CompEvaluation
         return false;
     }
 
+    public function InitValues($values){
+        if(is_array($values)){
+            foreach ($values as $key => $value){
+               // echo "$key => $value <br>";
+                $this->setIn($key,$value);
+            }
+        }else{
 
+        }
+    }
 
 }

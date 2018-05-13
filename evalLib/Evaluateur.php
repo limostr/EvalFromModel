@@ -77,7 +77,6 @@ class Evaluateur
 
     public function detectFunction(RecordFormule $formule){
 
-
         $_Has_Variable=preg_match($this->_Model_Exp_Reg['variable'],$formule->getToEval(),$matches);
 
         $formuleEvaluated=$formule->getToEval();
@@ -128,6 +127,9 @@ class Evaluateur
             break;
         }
         return $res;
+    }
+    private function loaderFunction(){
+
     }
 
   private function evalArithmetiquefunction($formuleEvaluated,RecordFormule $formule){

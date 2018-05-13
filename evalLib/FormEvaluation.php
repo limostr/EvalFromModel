@@ -9,6 +9,7 @@ class FormEvaluation{
     private $_CompEval;
     private $form="";
     public $FormAttrib;
+    public $_TableValueInit;
     private $_Has_Submit=false;
     public function __construct(CompEvaluation $EvalCom,FormStructer $FormData=Null)
     {
@@ -20,6 +21,16 @@ class FormEvaluation{
         }
 
         $this->FormContruction();
+    }
+
+    public function InitFromBind(){
+        if($EvalCom) {
+            foreach ($EvalCom as $key => $CompToEval) {
+                if ($CompToEval->_RecordEval->getAffiche()) {
+
+                }
+            }
+        }
     }
 
     /**
@@ -37,8 +48,6 @@ class FormEvaluation{
     {
         $this->FormAttrib = $FormAttrib;
     }
-
-
 
     public function FormContruction($EvalCom=Null){
 
@@ -90,31 +99,32 @@ class FormEvaluation{
             $this->form.="<fieldset>
                             <legend>".$formElts->_RecordEval->getLabel()."</legend>";
             foreach ($formElts->_form as $key => $elt){
-
+                $_InitValue=$this->_CompEval->lookForVariable($key);
                 switch ($elt->getType()){
                     case 'select':
-                        $this->form.=$this->setSelect($elt);
+                        $this->form.=$this->setSelect($elt,$_InitValue);
                         break;
                     case "text":
 
-                        $this->form.=$this->setText($elt);
+                        $this->form.=$this->setText($elt,$_InitValue);
                         break;
                     case "textarea":
-                        $this->form.=$this->setTextarea($elt);
+                        $this->form.=$this->setTextarea($elt,$_InitValue);
                         break;
                     case "submit":
                         $this->form.=$this->setSubmit($name,$id,$label);
                         break;
 
                     default:
-                        $this->form.=$this->setOtherInput($elt);
+                        $this->form.=$this->setOtherInput($elt,$_InitValue);
                     break;
                 }
+
             }
             $this->form.="</fieldset>";
         }
     }
-    public function setSelect(RecordForm $elt){
+    public function setSelect(RecordForm $elt,$_InitValue){
         $class=$this->DetectClass($elt->getClass());
         $other=$this->DetectOtherAttrib($elt->getOther());
 
@@ -122,38 +132,39 @@ class FormEvaluation{
         $select .="<select name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $other $class>";
         $list=$elt->getList();
         foreach ($list as $key=>$val){
-            $select.="<option value=\"$key\" >$val</option>";
+            $selected = !empty($_InitValue) && $key==$_InitValue ? "Selected=\"selected\"" :"";
+            $select.="<option value=\"$key\" $selected>$val</option>";
         }
 
         $select.="</select>";
         return $select;
     }
 
-    public function setText(RecordForm $elt){
+    public function setText(RecordForm $elt,$_InitValue){
         $class=$this->DetectClass($elt->getClass());
         $other=$this->DetectOtherAttrib($elt->getOther());
 
         $select="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
-        $select .="<input type=\"text\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+        $select .="<input type=\"text\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
         return $select;
     }
 
-    public function setOtherInput(RecordForm $elt){
+    public function setOtherInput(RecordForm $elt,$_InitValue){
 
         $class=$this->DetectClass($elt->getClass());
         $other=$this->DetectOtherAttrib($elt->getOther());
         $input="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
 
-        $input .="<input type=\"".$elt->getType()."\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+        $input .="<input type=\"".$elt->getType()."\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
         return $input;
     }
 
-    public function setTextarea(RecordForm $elt){
+    public function setTextarea(RecordForm $elt,$_InitValue){
         $class=$this->DetectClass($elt->getClass());
         $other=$this->DetectOtherAttrib($elt->getOther());
         $input="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
 
-        $input .="<textarea type=\"text\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $other $class></textarea>";
+        $input .="<textarea type=\"text\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $other $class>$_InitValue</textarea>";
         return $input;
     }
 

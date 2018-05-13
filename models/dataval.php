@@ -38,7 +38,7 @@ $LA =array(
      'Name'=>"LA"
     ,"database"=>array(
         "init"=>array(
-            "idUser"=>null
+            "idUser"=>8
         ),
         "loader"=>array(
             "table"=>"cvparcoursetud"
@@ -66,9 +66,16 @@ $LA =array(
                                     )
                              )
             ),
-            "value"=>array(
-                'pkey'=>""
+
+
+        ),
+        'insert'=>array(
+            'bind'=>array(
+                ''=>''
             )
+            ,'table'=>''
+            ,'updateCondetion'=>''
+
         )
     )
     ,'Label'=>"Parcours Licence Appliquée"
@@ -139,7 +146,7 @@ $N1 =array(
             ,"name"=>"{LA:SubComp:#N1:@Score}"
             ,"label"=>"Moyenne 1ére année: "
         )
-        ,"{LA:SubComp:#N1:AutreInformations:@Session}"=>array(
+        ,"{LA:SubComp:#N1:AutreInformations:@session}"=>array(
             "type"=>"select"
             ,"list"=>array(
                 "Principale" =>"Principale"
@@ -150,7 +157,7 @@ $N1 =array(
                 "class"=>array("required","Form-Control")
                 ,"other"=>array()
             )
-            ,"name"=>"{LA:SubComp:#N1:AutreInformations:@Session}"
+            ,"name"=>"{LA:SubComp:#N1:AutreInformations:@session}"
             ,"label"=>"Session: "
         )
 
@@ -163,9 +170,7 @@ $N1 =array(
                 "F1"=>array(
                     'type'=>'logique'
                     ,'toEval'=>"
-                        '{LA:SubComp:#N1:AutreInformations:@session}'=='Principale' 
-                       
-                    
+                        '{LA:SubComp:#N1:AutreInformations:@session}'=='Principale'  
                     "
                     ,"score"=>array("true"=>1,"false"=>0)
                     ,"default"=>0
@@ -253,14 +258,14 @@ $N2 =array(
                 ,"name"=>"{LA:SubComp:#N2:@Score}"
                 ,"label"=>"Moyenne 2éme année: "
             )
-            ,"{LA:SubComp:#N2:AutreInformations:@Session}"=>array(
+            ,"{LA:SubComp:#N2:AutreInformations:@session}"=>array(
                 "type"=>"select"
                 ,"list"=>array(
                     "Principale" =>"Principale"
                     ,"Rattrapage"=>"Rattrapage"
                 )
                 ,"options"=>array(  )
-                ,"name"=>"{LA:SubComp:#N2:AutreInformations:@Session}"
+                ,"name"=>"{LA:SubComp:#N2:AutreInformations:@session}"
                 ,"label"=>"Session: "
             )
 
