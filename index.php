@@ -12,8 +12,8 @@ evalLib\database\dbadapter::connect();
 
 $Comp=new \evalLib\CompEvaluation($LAModel);
 
-
-
+$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+$DataBaseInit->LoadData($Comp);
 $formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
 
 ?>

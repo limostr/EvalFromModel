@@ -37,21 +37,32 @@ $EvalModelData=array(
 $LA =array(
      'Name'=>"LA"
     ,"database"=>array(
-        "init"=>array(
+        'SelectorType'=>array(
+            'Multiple'=>0
+            ,'SqlSequence'=>"s1"
+            ,'chose'=>array(
+                'typediplome'=>array('IN'=>array(
+                    'Fondamentale',
+                    'Appliqué',
+                    'DUT'
+                ))
+            )
+        )
+        ,"init"=>array(
             "idUser"=>8
         ),
         "loader"=>array(
             "table"=>"cvparcoursetud"
             ,"pkey"=>"idcvparcoursetud"
-            ,"Sql"=>array(
+            ,"sql"=>array(
                     "s1"=>
                         array(
                                 "sql"=>"SELECT * FROM candidatcv WHERE idcandidat=:idUser"
                                  ,"prepare"=>array(
-                                        "idUser"=>"{#database:init:idUser}"
+                                        "idUser"=>"{LA:database:init:#idUser}"
                                     )
                                  ,"bind"=>array(
-                                    "{LA:#database:s2:prepare:idcandidatcv}"
+                                    "{LA:database:loader:#s2:prepare:idcandidatcv}"
                                 )
                         )
                     ,"s2"=>

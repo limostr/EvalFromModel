@@ -12,91 +12,51 @@ namespace evalLib;
 class DBInitCompLoader
 {
     private $CompEval;
-    private $_Init;
-    private $_Record_Load;
-    private $_Record_Insert;
 
-    public  function __construct(CompEvaluation &$CompEval)
+
+    public  function __construct(CompEvaluation  &$CompEval)
     {
         $this->CompEval=$CompEval;
     }
 
 
-    public function init($RecordDB){
-        $this->_Record_Load=new  \evalLib\MetaRecords\RecordLoader();
-        $this->_Record_Load->init($RecordDB['sql']);
+    public function LoadData(CompEvaluation $CompEval){
+
+        if($CompEval->_RecordDataBase){
+
+            $SqlToLoad= $CompEval->_RecordDataBase->getRecordLoad()->getRequests();
 
 
-        $this->_Record_Insert=new \evalLib\MetaRecords\RecordInsert();
-        $this->_Record_Insert->init($RecordDB['insert']);
-        $this->_Init=$RecordDB['init'];
+            foreach ($SqlToLoad as $key => $Sql){
+               $sqlString=$Sql->getSql();
+               $ArrayPrepare= $Sql->getPrepare();
+               $Array=[];
+               foreach ($ArrayPrepare as $Attrib => $NameInLoad){
+
+                   $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
 
 
-    }
-    /**
-     * @return mixed
-     */
-    public function getCompEval()
-    {
-        return $this->CompEval;
-    }
+               }
+               print_r($Array);
+               $record=\evalLib\database\dbadapter::SelectWithPrepare($sqlString,$Array);
+               print_r($record);
+            }
 
-    /**
-     * @param mixed $CompEval
-     */
-    public function setCompEval($CompEval)
-    {
-        $this->CompEval = $CompEval;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getInit()
-    {
-        return $this->Init;
-    }
+            foreach ($CompEval as $key => $CompToEval){
 
-    /**
-     * @param mixed $Init
-     */
-    public function setInit($Init)
-    {
-        $this->Init = $Init;
+                if(is_array($CompToEval->_SubComp) && count($CompToEval->_SubComp)) {
+                    $this->LoadData($CompToEval->_SubComp);
+                }
+
+
+            }
+        }
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRecordLoad()
-    {
-        return $this->_Record_Load;
-    }
+    public function RedirectForChose(){
 
-    /**
-     * @param mixed $Record_Load
-     */
-    public function setRecordLoad($Record_Load)
-    {
-        $this->_Record_Load = $Record_Load;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getRecordInsert()
-    {
-        return $this->_Record_Insert;
-    }
-
-    /**
-     * @param mixed $Record_Insert
-     */
-    public function setRecordInsert($Record_Insert)
-    {
-        $this->_Record_Insert = $Record_Insert;
-    }
-
 
 
 }

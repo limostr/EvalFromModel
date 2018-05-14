@@ -54,12 +54,44 @@ use evalLib\Readers\Configuration;
             die();
         }
     }
+    public static function SelectWithPrepare($Sql,$dataPrepare=array()){
+        try {
+            $data=false;
+
+
+
+
+            $stmt = self::$dbh->prepare($Sql);
+
+            foreach ($dataPrepare as $Attribi=>$ValueAttribi){
+
+                $stmt->bindValue( ":$Attribi" , $ValueAttribi);
+            }
+
+          //  $req= $stmt->execute();
+            $req=$stmt->fetchAll();
+            print_r($req);
+           // $req=self::$dbh->query($Sql);
+            if(count($req)>0){
+                foreach($req as $row) {
+                    $data[]=$row;
+                }
+            }
+
+            return $data;
+        } catch (PDOException $e) {
+            print "Erreur !: " . $e->getMessage() . "<br/>";
+            die();
+        }
+    }
     public static function SelectSQL($Sql){
         //self::connect();
         try {
             $data=false;
 
-        $req=self::$dbh->query($Sql);
+
+
+             $req=self::$dbh->query($Sql);
         if($req){
             foreach($req as $row) {
                 $data[]=$row;

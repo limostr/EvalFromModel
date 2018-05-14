@@ -21,13 +21,14 @@ class RecordLoader implements Record
 
         $this->_Table=isset($Record_Load['table']) ? $Record_Load['table'] : "";
         $this->_PKey=isset($Record_Load['pkey']) ? $Record_Load['pkey'] : "";
+
         if(isset($Record_Load['sql'])){
             foreach ($Record_Load['sql'] as $key => $sql){
                 $LoderRecord = new \evalLib\MetaRecords\RecordSql();
                 $LoderRecord->setSql(isset($sql['sql']) ? $sql['sql'] : "");
                 $LoderRecord->setPrepare(isset($sql['prepare']) ? $sql['prepare'] : "");
                 $LoderRecord->setBind(isset($sql['bind']) ? $sql['bind'] : "");
-                $_Requests[$key]=$Record_Load;
+                $this->_Requests[$key]=$LoderRecord;
             }
 
         }

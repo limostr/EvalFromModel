@@ -15,13 +15,12 @@ class CompEvaluation
 {
     public $_RecordEval;
     public $_RecordForm;
-    public $_RecordLoader;
+    public $_RecordDataBase;
     public $_Formule;
     public $_form;
     public $_Parent=Null;
     public $_AutreInformations;
     public $_Model ;
-
     public $_SubComp=array();
 
     private  $_Original;
@@ -125,6 +124,12 @@ class CompEvaluation
                 $this->_Model[$keyForm]=$RecordModelEval;
             }
         }
+
+        if(isset($JsonDecode['database'])){
+            $this->_RecordDataBase=new \evalLib\MetaRecords\RecordDataBase();
+            $this->_RecordDataBase->Init($JsonDecode['database']);
+        }
+
         $this->_AutreInformations= isset($JsonDecode['AutreInformations']) ? (object) $JsonDecode['AutreInformations'] : Null;
 
     }
@@ -220,6 +225,9 @@ class CompEvaluation
                 }
 
                 break;
+            case "database":
+               // $ChaineAcces.="->_RecordDataBase";
+            break;
             default :
                // echo  $ChaineAcces."<br>" ;
               //  echo $var[$i]."<br>";
@@ -345,6 +353,15 @@ class CompEvaluation
                         }
 
                         break;
+                    case "database":
+                        $Pointeur=$Pointeur->_RecordDataBase;
+                        break;
+                    case "loader":
+                        $Pointeur=$Pointeur->getRecordLoad();
+                        break;
+                    case "init":
+                        $Pointeur=$Pointeur->getInit();
+                        break;
                     default :
                         if($var[$i][0]=="@"){
                             $key=str_replace("@","",$var[$i]);
@@ -368,8 +385,10 @@ class CompEvaluation
                             }
 
                         }elseif($var[$i][0]=="#"){
+
                             $key=str_replace("#","",$var[$i]);
-                            $valeurFinal=$Pointeur[$key];
+                            print_r($Pointeur);echo $var[$i];echo " $key<br>";
+                            $valeurFinal=$Pointeur["$key"];
                         }
 
                     break;
@@ -404,5 +423,134 @@ class CompEvaluation
 
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRecordEval()
+    {
+        return $this->_RecordEval;
+    }
+
+    /**
+     * @param mixed $RecordEval
+     */
+    public function setRecordEval($RecordEval)
+    {
+        $this->_RecordEval = $RecordEval;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRecordForm()
+    {
+        return $this->_RecordForm;
+    }
+
+    /**
+     * @param mixed $RecordForm
+     */
+    public function setRecordForm($RecordForm)
+    {
+        $this->_RecordForm = $RecordForm;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRecordDataBase() : \evalLib\MetaRecords\RecordDataBase
+    {
+        return  $this->_RecordDataBase;
+    }
+
+    /**
+     * @param mixed $RecordDataBase
+     */
+    public function setRecordDataBase($RecordDataBase)
+    {
+        $this->_RecordDataBase = $RecordDataBase;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFormule()
+    {
+        return $this->_Formule;
+    }
+
+    /**
+     * @param mixed $Formule
+     */
+    public function setFormule($Formule)
+    {
+        $this->_Formule = $Formule;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForm()
+    {
+        return $this->_form;
+    }
+
+    /**
+     * @param mixed $form
+     */
+    public function setForm($form)
+    {
+        $this->_form = $form;
+    }
+
+    /**
+     * @return CompEvaluation|null
+     */
+    public function getParent()
+    {
+        return $this->_Parent;
+    }
+
+    /**
+     * @param CompEvaluation|null $Parent
+     */
+    public function setParent($Parent)
+    {
+        $this->_Parent = $Parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAutreInformations()
+    {
+        return $this->_AutreInformations;
+    }
+
+    /**
+     * @param mixed $AutreInformations
+     */
+    public function setAutreInformations($AutreInformations)
+    {
+        $this->_AutreInformations = $AutreInformations;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->_Model;
+    }
+
+    /**
+     * @param mixed $Model
+     */
+    public function setModel($Model)
+    {
+        $this->_Model = $Model;
+    }
+
 
 }
