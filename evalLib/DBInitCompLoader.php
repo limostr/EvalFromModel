@@ -37,15 +37,26 @@ class DBInitCompLoader
 
 
                }
-               print_r($Array);
-               $record=\evalLib\database\dbadapter::SelectWithPrepare($sqlString,$Array);
+                $record=\evalLib\database\dbadapter::SelectWithPrepare($sqlString,$Array);
+                if(count($record)==1){
+                    $record=$record[0];
+                }
+                $Binds= $Sql->getBind();
+                foreach ($Binds as $keybind => $varname){
+                    if(isset($record[$keybind])){
+
+                        $this->CompEval->setIn($varname,$record[$keybind]);
+                    }
+
+                }
+
                print_r($record);
             }
 
 
             foreach ($CompEval as $key => $CompToEval){
 
-                if(is_array($CompToEval->_SubComp) && count($CompToEval->_SubComp)) {
+                if(isset($CompToEval->_SubComp) && ($CompToEval->_SubComp) && count($CompToEval->_SubComp)) {
                     $this->LoadData($CompToEval->_SubComp);
                 }
 

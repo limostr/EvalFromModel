@@ -62,7 +62,7 @@ $LA =array(
                                         "idUser"=>"{LA:database:init:#idUser}"
                                     )
                                  ,"bind"=>array(
-                                    "{LA:database:loader:#s2:prepare:idcandidatcv}"
+                                    "idcandidatcv"=>"{LA:database:loader:#s2:prepare:#idcandidatcv}"
                                 )
                         )
                     ,"s2"=>
@@ -124,6 +124,13 @@ $LA =array(
              )
             ,"name"=>"LA_Titre"
             ,"label"=>"Titre: "
+        )
+    )
+    ,"template"=>array(
+        "ligne"=>array("Score"=>""
+        ,"")
+        ,"liste"=>array(
+
         )
     )
 );

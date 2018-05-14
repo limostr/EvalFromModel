@@ -356,13 +356,32 @@ class CompEvaluation
                     case "database":
                         $Pointeur=$Pointeur->_RecordDataBase;
                         break;
+                    case "prepare":
+                        $Pointeur=$Pointeur->getPrepare();
+                        break;
                     case "loader":
+                        $next_request=$var[$i+1];
                         $Pointeur=$Pointeur->getRecordLoad();
+                        if($next_request[0]=="#"){
+                            $next_request=str_replace("#","",$next_request);
+                            $NPointeur=array();
+                            if(is_array($Pointeur)){
+                                foreach ($Pointeur as $key => $Pval){
+                                    $NPointeur[]=$Pointeur[$key];
+                                }
+                            }else{
+                                $NPointeur=$Pointeur[$next_request];
+                             }
+
+                            $Pointeur=$NPointeur;
+                            $i++;
+                        }
                         break;
                     case "init":
                         $Pointeur=$Pointeur->getInit();
                         break;
                     default :
+
                         if($var[$i][0]=="@"){
                             $key=str_replace("@","",$var[$i]);
 
@@ -387,7 +406,7 @@ class CompEvaluation
                         }elseif($var[$i][0]=="#"){
 
                             $key=str_replace("#","",$var[$i]);
-                            print_r($Pointeur);echo $var[$i];echo " $key<br>";
+                           // print_r($Pointeur);echo $var[$i];echo " $key<br>";
                             $valeurFinal=$Pointeur["$key"];
                         }
 

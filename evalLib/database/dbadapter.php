@@ -58,9 +58,6 @@ use evalLib\Readers\Configuration;
         try {
             $data=false;
 
-
-
-
             $stmt = self::$dbh->prepare($Sql);
 
             foreach ($dataPrepare as $Attribi=>$ValueAttribi){
@@ -68,17 +65,11 @@ use evalLib\Readers\Configuration;
                 $stmt->bindValue( ":$Attribi" , $ValueAttribi);
             }
 
-          //  $req= $stmt->execute();
+            $stmt->execute();
             $req=$stmt->fetchAll();
-            print_r($req);
-           // $req=self::$dbh->query($Sql);
-            if(count($req)>0){
-                foreach($req as $row) {
-                    $data[]=$row;
-                }
-            }
 
-            return $data;
+
+            return $req;
         } catch (PDOException $e) {
             print "Erreur !: " . $e->getMessage() . "<br/>";
             die();
