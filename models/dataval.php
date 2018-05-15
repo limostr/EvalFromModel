@@ -127,10 +127,17 @@ $LA =array(
         )
     )
     ,"template"=>array(
-        "ligne"=>array("Score"=>""
-        ,"")
+        "ligne"=>array(
+            "Score" =>      array("Type"=>"SET","Malloc"=>"{LA:@Score}","Value"=>"")
+            ,"N1"   =>      array("Type"=>"SET","Malloc"=>"{LA:SubComp:#N1:@Score}","Value"=>"")
+            ,"N2"   =>      array("Type"=>"SET","Malloc"=>"{LA:SubComp:#N2:@Score}","Value"=>"")
+            ,"BS"   =>      array("Type"=>"EVAL","Malloc"=>"MethodEval::SUM({LA:SubComp:Model:BS:@Score})","Value"=>"")
+            ,"BM"   =>      array("Type"=>"EVAL","Malloc"=>"MethodEval::SUM({LA:SubComp:Model:BM:@Score})","Value"=>"")
+            ,"Moy"  =>      array("Type"=>"EVAL","Malloc"=>"MethodEval::MOYART({LA:SubComp:Model:Moy:@Score})","Value"=>"")
+        )
         ,"liste"=>array(
-
+            "Nom"       =>      array("Type"=>"GET","Malloc"=>"","Value"=>"")
+            ,"Prenom"   =>      array("Type"=>"GET","Malloc"=>"","Value"=>"")
         )
     )
 );

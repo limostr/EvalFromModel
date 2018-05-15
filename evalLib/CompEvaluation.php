@@ -17,6 +17,7 @@ class CompEvaluation
     public $_RecordForm;
     public $_RecordDataBase;
     public $_Formule;
+    public $_Template;
     public $_form;
     public $_Parent=Null;
     public $_AutreInformations;
@@ -128,6 +129,11 @@ class CompEvaluation
         if(isset($JsonDecode['database'])){
             $this->_RecordDataBase=new \evalLib\MetaRecords\RecordDataBase();
             $this->_RecordDataBase->Init($JsonDecode['database']);
+        }
+
+        if(isset($JsonDecode['template'])){
+            $this->_Template=new \evalLib\MetaRecords\RecordTemplate();
+            $this->_Template->init($JsonDecode['template']);
         }
 
         $this->_AutreInformations= isset($JsonDecode['AutreInformations']) ? (object) $JsonDecode['AutreInformations'] : Null;
@@ -282,6 +288,8 @@ class CompEvaluation
         }
 
     }
+
+
 
      public function lookForVariable($varname){
 

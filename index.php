@@ -12,8 +12,8 @@ evalLib\database\dbadapter::connect();
 
 $Comp=new \evalLib\CompEvaluation($LAModel);
 
-$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
-$DataBaseInit->LoadData($Comp);
+/*$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+$DataBaseInit->LoadData($Comp);*/
 $formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
 
 ?>
@@ -30,6 +30,11 @@ if(count($_POST)<=0){
   ///  print_r($Comp);
     $Evaluateur=new \evalLib\Evaluateur($Comp);
     $Evaluateur->Evaluation();
+
+    $Vue=new \evalLib\ViewGen($Comp);
+    $Vue->_InitValue();
+    print_r($Comp);
+
 }
 
 /*$Comp=new \evalLib\CompEvaluation($ue);

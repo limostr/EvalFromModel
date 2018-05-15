@@ -99,7 +99,6 @@ class Evaluateur
 
        foreach($formuleBind as $key => $val){
            $UID=str_ireplace(array("}","{"),"",$val);
-
            $this->CompEval->setIn($UID,$res);
        }
 
