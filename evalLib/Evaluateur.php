@@ -59,16 +59,28 @@ class Evaluateur
         if(isset($PComp->_Model)){
             foreach ($PComp->_Model as $KeyModel => $FormuleModel){
                 $Formules=$FormuleModel->getFormule();
+                $res=0;
                 foreach ($Formules as $keyFormModel => $Formule){
-                    $res=$this->detectFunction($Formule);
+                  //  echo $Formule->getNature();
+                    if ($Formule->getNature()=="else" && !$res){
+                        $res=$this->detectFunction($Formule);
+                    }elseif ($Formule->getNature()!="else"){
+                        $res=$this->detectFunction($Formule);
+                    }
                 }
             }
 
         }
 
         if(isset($PComp->_Formule)){
+            $res=0;
             foreach ($PComp->_Formule as $KeyFormule => $Formule){
-                $res=$this->detectFunction($Formule);
+
+                if ($Formule->getNature()=="else" && !$res){
+                    $res=$this->detectFunction($Formule);
+                }elseif ($Formule->getNature()!="else"){
+                    $res=$this->detectFunction($Formule);
+                }
              }
 
         }
@@ -77,7 +89,7 @@ class Evaluateur
 
     public function detectFunction(RecordFormule $formule){
 
-        $_Has_Variable=preg_match($this->_Model_Exp_Reg['variable'],$formule->getToEval(),$matches);
+        //$_Has_Variable=preg_match($this->_Model_Exp_Reg['variable'],$formule->getToEval(),$matches);
 
         $formuleEvaluated=$formule->getToEval();
             while (preg_match($this->_Model_Exp_Reg['variable'],$formuleEvaluated,$matches)){
@@ -95,8 +107,8 @@ class Evaluateur
         echo "<pre style='color: darkgoldenrod;'>";print_r($formuleEvaluated);echo"</pre>";
 
        $res = $this->evalfunction($formuleEvaluated,$formule);
-       $formuleBind=$formule->getBind();
 
+       $formuleBind=$formule->getBind();
        foreach($formuleBind as $key => $val){
            $UID=str_ireplace(array("}","{"),"",$val);
            $this->CompEval->setIn($UID,$res);
@@ -105,7 +117,7 @@ class Evaluateur
         echo "<pre style='color: red;font-size: large;'>$res</pre>";
 
 
-        return $formule;
+        return $res;
     }
 
 

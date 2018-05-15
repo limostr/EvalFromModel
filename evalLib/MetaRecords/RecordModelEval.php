@@ -94,6 +94,7 @@ class RecordModelEval implements Record
             foreach ($ListFormule  as $keyFormule => $Formule){
                 $RecordForm=new RecordFormule();
                 $RecordForm->setName($keyFormule);
+                $RecordForm->setNature($Formule['nature']);
                 $RecordForm->setScore($Formule['score']);
                 $RecordForm->setDescription($Formule['description']);
                 $RecordForm->setToEval($Formule['toEval']);

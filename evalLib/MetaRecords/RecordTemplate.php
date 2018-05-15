@@ -34,7 +34,7 @@ class RecordTemplate
                 $Template->setType(isset($elt['Type']) ? $elt['Type'] : "");
                 $Template->setMallocForm(isset($elt['Malloc']) ? $elt['Malloc'] : "");
                 $Template->setValue(isset($elt['Value']) ? $elt['Value'] : "");
-                $this->_liste[]=$Template;
+                $this->_liste[$key]=$Template;
             }
 
         }
@@ -45,7 +45,7 @@ class RecordTemplate
                 $Template->setType(isset($elt['Type']) ? $elt['Type'] : "");
                 $Template->setMallocForm(isset($elt['Malloc']) ? $elt['Malloc'] : "");
                 $Template->setValue(isset($elt['Value']) ? $elt['Value'] : "");
-                $this->_ligne[]=$Template;
+                $this->_ligne[$key]=$Template;
             }
 
         }

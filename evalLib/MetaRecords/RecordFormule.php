@@ -23,6 +23,7 @@ namespace evalLib\MetaRecords;
 class RecordFormule implements Record
 {
     private $_Name="";
+    private $_Nature="";
     private $_toEval="";
     private $_score="";
     private $_default="";
@@ -31,7 +32,7 @@ class RecordFormule implements Record
     private $_type="";
     private $_bind="";
 
-    public function __construct($type="",$Name="",$toEval="" ,$score="",$description="",$decision="",$default="",$bind="")
+    public function __construct($type="",$Nature="",$Name="",$toEval="" ,$score="",$description="",$decision="",$default="",$bind="")
     {
         $this->_type=$type;
         $this->_Name=$Name;
@@ -41,6 +42,7 @@ class RecordFormule implements Record
         $this->_decision=$decision;
         $this->_default=$default;
         $this->_bind =$bind;
+        $this->_Nature=$Nature;
     }
 
 
@@ -59,6 +61,22 @@ class RecordFormule implements Record
     public function setName($Name)
     {
         $this->_Name = $Name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNature()
+    {
+        return $this->_Nature;
+    }
+
+    /**
+     * @param string $Nature
+     */
+    public function setNature($Nature)
+    {
+        $this->_Nature = $Nature;
     }
 
     /**

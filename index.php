@@ -33,7 +33,7 @@ if(count($_POST)<=0){
 
     $Vue=new \evalLib\ViewGen($Comp);
     $Vue->_InitValue();
-    print_r($Comp);
+   echo $Vue->genVue(file_get_contents(dirname(__FILE__)."/view/relever.phtml"));
 
 }
 

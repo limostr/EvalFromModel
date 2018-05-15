@@ -94,6 +94,7 @@ $LA =array(
     ,'Formule'=>array(
         "F1"=>array(
             'type'=>'arithmetique'
+            ,'nature'=>"arithmetique"
             ,'toEval'=>"MethodEval::SUM({LA:SubComp:Model:BS:@Score}) * MethodEval::MOYART({LA:SubComp:Model:Moy:@Score})+MethodEval::SUM({LA:SubComp:Model:BM:@Score})"
             ,"score"=>0
             ,"default"=>0
@@ -194,9 +195,8 @@ $N1 =array(
             ,'Formule'=>array(
                 "F1"=>array(
                     'type'=>'logique'
-                    ,'toEval'=>"
-                        '{LA:SubComp:#N1:AutreInformations:@session}'=='Principale'  
-                    "
+                    ,'nature'=>"if"
+                    ,'toEval'=>" '{LA:SubComp:#N1:AutreInformations:@session}'=='Principale'  "
                     ,"score"=>array("true"=>1,"false"=>0)
                     ,"default"=>0
                     ,"description"=>""
@@ -217,13 +217,45 @@ $N1 =array(
             ,'Formule'=>array(
                    "F1"=> array(
                        'type'=>'logique'
+                        ,'nature'=>"if"
                        ,'toEval'=>"{LA:SubComp:#N1:@Score}>=10 && {LA:SubComp:#N1:@Score} <12"
                        ,"score"=>array("true"=>1,"false"=>0)
                        ,"default"=>0
                        ,"description"=>""
                        ,"decision"=>"Passable"
                        ,"bind"=>array("b1"=>"{LA:SubComp:#N1:Model:#BM:@Score}")
-                   )
+                   ),
+                "F2"=> array(
+                    'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N1:@Score}>=12 && {LA:SubComp:#N1:@Score} <14"
+                    ,"score"=>array("true"=>2,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Assez bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N1:Model:#BM:@Score}")
+                    ),
+                "F3"=> array(
+                    'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N1:@Score}>=14 && {LA:SubComp:#N1:@Score} <16"
+                    ,"score"=>array("true"=>3,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N1:Model:#BM:@Score}")
+                ),
+                "F4"=> array(
+                    'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N1:@Score}>=16"
+                    ,"score"=>array("true"=>4,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Trés Bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N1:Model:#BM:@Score}")
+                )
+
                 )
             ,'Score'=>""
             ,'Poid'=>""
@@ -236,6 +268,7 @@ $N1 =array(
             ,'Formule'=>array(
                 "F1"=> array(
                     'type'=>'arithmetique'
+                    ,'nature'=>"arithmetique"
                     ,'toEval'=>"{LA:SubComp:#N1:@Score}"
                     ,"score"=>array("true"=>1,"false"=>0)
                     ,"default"=>0
@@ -303,12 +336,23 @@ $N2 =array(
                 ,'Formule'=>array(
                        "F1"=> array(
                            'type'=>'logique'
+                           ,'nature'=>"if"
                            ,'toEval'=>"'{LA:SubComp:#N2:AutreInformations:@session}'=='Principale'"
                            ,"score"=>array("true"=>1,"false"=>0)
                            ,"default"=>0,"description"=>""
                            ,"decision"=>""
                            ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BS:@Score}")
-                       )
+
+                       ),
+                    "F2"=>array(
+                        'type'=>'logique'
+                        ,'nature'=>"else"
+                        ,'toEval'=>"'{LA:SubComp:#N2:AutreInformations:@session}'=='Principale'"
+                        ,"score"=>array("true"=>1,"false"=>0)
+                        ,"default"=>0,"description"=>""
+                        ,"decision"=>""
+                        ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BS:@Score}")
+                    ),
 
                     )
                 ,'Score'=>"2"
@@ -320,14 +364,46 @@ $N2 =array(
                 'Name'=>"BM"
                 ,'Label'=>"Bonus Session"
                 ,'Formule'=>array(
-                    "F1"=> array('type'=>'logique',
-                        'toEval'=>"{LA:SubComp:#N2:@Score}>=10 && {LA:SubComp:#N2:@Score} <12"
+                    "F1"=> array(
+                        'type'=>'logique'
+                        ,'nature'=>"if"
+                        ,'toEval'=>"{LA:SubComp:#N2:@Score}>=10 && {LA:SubComp:#N2:@Score} <12"
                         ,"score"=>array("true"=>1,"false"=>0)
                         ,"default"=>0
                         ,"description"=>""
                         ,"decision"=>"Passable"
                         ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
-                        )
+                        ),
+                    "F2"=> array(
+                        'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N2:@Score}>=12 && {LA:SubComp:#N2:@Score} <14"
+                    ,"score"=>array("true"=>2,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Assez bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
+                    ),
+                    "F3"=> array(
+                        'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N2:@Score}>=14 && {LA:SubComp:#N2:@Score} <16"
+                    ,"score"=>array("true"=>3,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
+                    ),
+                    "F4"=> array(
+                        'type'=>'logique'
+                    ,'nature'=>"else"
+                    ,'toEval'=>"{LA:SubComp:#N2:@Score}>=16"
+                    ,"score"=>array("true"=>4,"false"=>0)
+                    ,"default"=>0
+                    ,"description"=>""
+                    ,"decision"=>"Trés Bien"
+                    ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
+                    )
                     )
                 ,'Score'=>"0"
                 ,'Poid'=>""
@@ -340,6 +416,7 @@ $N2 =array(
                 ,'Formule'=>array(
                     "F1"=> array(
                         'type'=>'arithmetique'
+                        ,'nature'=>"arithmetique"
                         ,'toEval'=>"{LA:SubComp:#N2:@Score}"
                         ,"score"=>array("true"=>1,"false"=>0)
                         ,"default"=>0

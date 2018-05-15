@@ -76,7 +76,7 @@ class ViewGen
         }
 
         public function evaluer($formuleEvaluated){
-            echo $formuleEvaluated."<br>";
+         //   echo $formuleEvaluated."<br>";
             $formule=$formuleEvaluated;
             while (preg_match($this->_Model_Exp_Reg['variable'],$formule,$matches)){
                 if(isset($matches[0]) && !empty($matches[0])){
@@ -97,7 +97,24 @@ class ViewGen
         }
 
         public function genVue($VueTemplate){
-            
+            if($this->CompEval->_Template) {
+
+                /**
+                 *
+                 */
+                $Liste = $this->CompEval->_Template->getListe();
+                foreach ($Liste as $key => $lg) {
+                    $v=$lg->getValue();
+                    $VueTemplate = str_ireplace("{".$key.":@Value}",$v, $VueTemplate);
+                }
+                $Ligne = $this->CompEval->_Template->getLigne();
+                foreach ($Ligne as $key => $lg) {
+                    $v=$lg->getValue();
+                    $VueTemplate = str_ireplace("{".$key.":@Value}",$v, $VueTemplate);
+
+                }
+            }
+            return $VueTemplate;
         }
 
 }
