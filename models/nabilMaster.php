@@ -2,54 +2,37 @@
 /**
  * Created by PhpStorm.
  * User: o.limam
- * Date: 15/05/2018
- * Time: 15:48
- */
-
-
-<?php
-/**
- * Created by PhpStorm.
- * User: o.limam
  * Date: 08/05/2018
  * Time: 13:24
  */
 
+/*
 
-$modelData =array(
-    'Name'
-,'Label'
-,'Formule'
-,'Score'
-,'Poid'
-,'description'
-,'decision'
-,'AutreInformations'
-,'Model'
-,'SubComp'
-);
 
-$EvalModelData=array(
-    'Name'=>"ParcourUniversitaire"
-    ,'Label'=>"Parcours Universitaire"
-    ,'Formule'=>array()
-    ,'Score'=>""
-    ,'Poid'=>""
-    ,'description'=>""
-    ,'decision'=>""
-    ,'SubComp'=>[]
-    ,'AutreInformations'=>""
-    ,'Model'=>array()
-);
+Score =2×MoyenneGénérale + Malus Redoublement + Malus Contôle + Bonus bac + Bonus Crédits + Bonus Diplôme
+Avec :
+1.	Bonus Diplôme (1point licence, 2 points maitrise, 3 points ingénieur, 4 points doctorat)
+2.	La moyenne Générale est la moyenne pondérée des moyennes des années d'études suivantes :
+•         des trois années de licence (Moy L1+2*Moy L2+2*Moy L3-S1)/5.
+•         des quatre années de maîtrise (Moy A1+Moy A2+2*Moy A3+2*Moy A4-S1)/5
+•         des trois années d’ingénieries (Moy Ing1+2*Moy Ing2+2*Moy Ing3-S1)/5
+3.     Bonus année d’obtention du diplôme : 3 points (diplôme 2018), 2 points (diplôme 2017), 1 point (diplôme 2016)
+4.     Bonus expérience professionnelle : 3 points (plus de trois ans), 2 points (2 ans), 1 point (1an)
+5.     Malus redoublement = - 1point/redoublement.
+6.     Malus contrôle = - 05 point/ session contrôle.
+7.     Bonus bac : 0 point ( M passable), 1 points (M Assez bien), 2 points (M. Bien) et 3 points ((M. Très bien)
+8.     Bonus crédits (selon le total des crédits des trois années) = +0 (si total inférieur à 150), + 2 points (si total entre 151 et 170) et +4 (si total entre 171 et 180).
 
+
+*/
 //diplome Licence Appliquee
 $LA =array(
     'Name'=>"LA"
     ,"database"=>array(
     'SelectorType'=>array(
         'Multiple'=>0
-    ,'SqlSequence'=>"s1"
-    ,'chose'=>array(
+        ,'SqlSequence'=>"s1"
+        ,'chose'=>array(
             'typediplome'=>array('IN'=>array(
                 'Fondamentale',
                 'Appliqué',
@@ -62,17 +45,17 @@ $LA =array(
         ),
         "loader"=>array(
             "table"=>"cvparcoursetud"
-        ,"pkey"=>"idcvparcoursetud"
-        ,"sql"=>array(
+            ,"pkey"=>"idcvparcoursetud"
+            ,"sql"=>array(
                 "s1"=>
                     array(
                         "sql"=>"SELECT * FROM candidatcv WHERE idcandidat=:idUser"
-                    ,"prepare"=>array(
-                        "idUser"=>"{LA:database:init:#idUser}"
-                    )
-                    ,"bind"=>array(
-                        "idcandidatcv"=>"{LA:database:loader:#s2:prepare:#idcandidatcv}"
-                    )
+                        ,"prepare"=>array(
+                            "idUser"=>"{LA:database:init:#idUser}"
+                        )
+                        ,"bind"=>array(
+                            "idcandidatcv"=>"{LA:database:loader:#s2:prepare:#idcandidatcv}"
+                        )
                     )
             ,"s2"=>
                     array(

@@ -11,20 +11,20 @@ use evalLib\MetaRecords\Record;
 
 class RecordDataBase implements Record
 {
-    private $_Init;
-    private $_SelectorType;
-    private $_Record_Load;
-    private $_Record_Insert;
+    public $_Init;
+    public $_SelectorType;
+    public $_Record_Load;
+    public $_Record_Insert;
 
     public function Init($RecordDB){
-        $this->_Record_Load=new  \evalLib\MetaRecords\RecordLoader();
+        $this->_Record_Load=new  \evalLib\MetaRecords\RecordDB\RecordLoader();
         $this->_Record_Load->init($RecordDB['loader']);
 
-        $this->_Record_Insert=new \evalLib\MetaRecords\RecordInsert();
+        $this->_Record_Insert=new \evalLib\MetaRecords\RecordDB\RecordInsert();
         $this->_Record_Insert->init($RecordDB['insert']);
         $this->_Init=$RecordDB['init'];
 
-        $this->_SelectorType=new \evalLib\MetaRecords\RecordSelector();
+        $this->_SelectorType=new \evalLib\MetaRecords\RecordDB\RecordSelector();
         $this->_SelectorType->Init($RecordDB['SelectorType']);
 
 
@@ -67,7 +67,7 @@ class RecordDataBase implements Record
     /**
      * @return mixed
      */
-    public function getRecordLoad() : \evalLib\MetaRecords\RecordLoader
+    public function getRecordLoad() : \evalLib\MetaRecords\RecordDB\RecordLoader
     {
         return $this->_Record_Load;
     }

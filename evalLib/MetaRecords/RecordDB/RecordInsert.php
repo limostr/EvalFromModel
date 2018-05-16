@@ -6,7 +6,7 @@
  * Time: 19:59
  */
 
-namespace evalLib\MetaRecords;
+namespace evalLib\MetaRecords\RecordDB;
 
 use evalLib\MetaRecords\Record;
 

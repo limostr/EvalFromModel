@@ -1,5 +1,5 @@
 <?php
-namespace evalLib\database;
+namespace library\database;
 
 /**
  * Created by PhpStorm.
@@ -7,7 +7,7 @@ namespace evalLib\database;
  * Date: 10/07/2017
  * Time: 21:34
  */
-use evalLib\Readers\Configuration;
+use library\Readers\Configuration;
 
  abstract class dbadapter
 {
@@ -60,18 +60,19 @@ use evalLib\Readers\Configuration;
 
             $stmt = self::$dbh->prepare($Sql);
 
-            foreach ($dataPrepare as $Attribi=>$ValueAttribi){
-
-                $stmt->bindValue( ":$Attribi" , $ValueAttribi);
+            foreach ($dataPrepare as $Attribi => $ValueAttribi){
+                 $stmt->bindValue( ":$Attribi" , $ValueAttribi);
             }
 
+
             $stmt->execute();
+
             $req=$stmt->fetchAll();
 
 
             return $req;
         } catch (PDOException $e) {
-            print "Erreur !: " . $e->getMessage() . "<br/>";
+            print "Erreur !: $Sql " . $e->getMessage() . "<br/>";
             die();
         }
     }

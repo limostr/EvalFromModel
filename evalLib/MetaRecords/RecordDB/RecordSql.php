@@ -6,7 +6,7 @@
  * Time: 18:41
  */
 
-namespace evalLib\MetaRecords;
+namespace evalLib\MetaRecords\RecordDB;
 use evalLib\MetaRecords\Record;
 
 class RecordSql implements Record
@@ -63,10 +63,21 @@ class RecordSql implements Record
         $this->_Prepare = $Prepare;
     }
 
+    public function setInPrepare($KeyName,$value)
+    {
+        if(isset($this->_Prepare[$KeyName])){
+            $this->_Prepare[$KeyName] = $value;
+        }else{
+            throw new \Exception("Erreur");
+        }
+    }
 
+    public function getInPrepare($KeyName)
+    {
 
+            return $this->_Prepare[$KeyName] ;
 
-
+    }
 
     public function toJson() {}
     public function FromJsonString(string $JsonString){}

@@ -7,13 +7,13 @@ Autoloader::register();
 include "models/dataval.php";
 include "models/UEtoEval.php";
 
-evalLib\Readers\Configuration::config();
-evalLib\database\dbadapter::connect();
+library\Readers\Configuration::config();
+library\database\dbadapter::connect();
 
 $Comp=new \evalLib\CompEvaluation($LAModel);
 
-/*$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
-$DataBaseInit->LoadData($Comp);*/
+ $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+$DataBaseInit->LoadData($Comp);
 $formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
 
 ?>

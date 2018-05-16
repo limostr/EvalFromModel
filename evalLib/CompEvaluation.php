@@ -233,7 +233,47 @@ class CompEvaluation
 
                 break;
             case "database":
-               // $ChaineAcces.="->_RecordDataBase";
+                $ChaineAcces.="->_RecordDataBase";
+                break;
+            case "sql":
+                $next_request=$var[$i+1];
+                $ChaineAcces.="->_Requests";
+                if($next_request[0]=="#"){
+                    $key=str_replace("#","",$next_request);
+                    $ChaineAcces.="['$key']";
+
+                }else{
+                    $obj=null;
+
+                    eval("\$obj=\$this$ChaineAcces;");
+                    if(is_array($obj)){
+                        foreach ($obj as $key => $Pval){
+                            $tmpaccesschane=$ChaineAcces."['$key']";
+                            $this->setInSpecificObject($var,($i+1),$tmpaccesschane,$valeur);
+                        }
+                    }
+                }
+                $i+=1;
+                break;
+            case "prepare":
+                $next_request=$var[$i+1];
+
+                if($next_request[0]=="#"){
+                    $key=str_replace("#","",$next_request);
+                     eval("\$this$ChaineAcces->{'setInPrepare'}('$key' ,$valeur);");
+
+                }
+
+                $i+=1;
+                break;
+            case "loader":
+
+                $ChaineAcces.="->_Record_Load";
+
+                break;
+            case "init":
+                $ChaineAcces.="->_Init";
+                break;
             break;
             default :
                // echo  $ChaineAcces."<br>" ;

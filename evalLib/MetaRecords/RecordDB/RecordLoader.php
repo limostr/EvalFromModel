@@ -9,14 +9,21 @@
  *
  */
 
-namespace evalLib\MetaRecords;
+namespace evalLib\MetaRecords\RecordDB;
+use evalLib\MetaRecords\Record;
 
 class RecordLoader implements Record
 {
-    private $_Requests;
+    public $_Requests;
     private $_Table;
     private $_PKey;
     private $_ValuesLoaded;
+
+
+    public function setInPrepare($key,$Varname,$value){
+        $this->_Requests[$key]->setInPrepare($Varname,$value);
+    }
+
     public function init($Record_Load){
 
         $this->_Table=isset($Record_Load['table']) ? $Record_Load['table'] : "";
@@ -24,8 +31,8 @@ class RecordLoader implements Record
 
         if(isset($Record_Load['sql'])){
             foreach ($Record_Load['sql'] as $key => $sql){
-                $LoderRecord = new \evalLib\MetaRecords\RecordSql();
-                $LoderRecord->setSql(isset($sql['sql']) ? $sql['sql'] : "");
+                $LoderRecord = new \evalLib\MetaRecords\RecordDB\RecordSql();
+                $LoderRecord->setSql(isset($sql['sqlstring']) ? $sql['sqlstring'] : "");
                 $LoderRecord->setPrepare(isset($sql['prepare']) ? $sql['prepare'] : "");
                 $LoderRecord->setBind(isset($sql['bind']) ? $sql['bind'] : "");
                 $this->_Requests[$key]=$LoderRecord;

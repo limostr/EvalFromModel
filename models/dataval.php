@@ -57,24 +57,29 @@ $LA =array(
             ,"sql"=>array(
                     "s1"=>
                         array(
-                                "sql"=>"SELECT * FROM candidatcv WHERE idcandidat=:idUser"
+                                "sqlstring"=>"SELECT * FROM candidatcv WHERE idcandidat=:idUser"
                                  ,"prepare"=>array(
                                         "idUser"=>"{LA:database:init:#idUser}"
                                     )
-                                 ,"bind"=>array(
-                                    "idcandidatcv"=>"{LA:database:loader:#s2:prepare:#idcandidatcv}"
-                                )
+                                 ,"bind"=>
+                                     array(
+                                         "SET"=>array(
+                                             "idcandidatcv"=>"{LA:database:loader:sql:#s2:prepare:#idcandidatcv}"
+                                         )
+                                     )
                         )
                     ,"s2"=>
                         array(
-                                "sql"=>"SELECT * FROM cvparcoursetud WHERE idcandidatcv=:idcandidatcv"
+                                "sqlstring"=>"SELECT * FROM cvparcoursetud WHERE idcandidatcv=:idcandidatcv"
                                 ,"prepare"=>array(
                                     "idcandidatcv"=>""
                                 )
                                 ,"bind"=>array(
-                                         "{LA:form:#LA_Titre:options:other:@value}"=>"diplometitre"
-                                        ,"{LA:form:#LA_Titre:options:other:@data_Id}"=>"idcvparcoursetud"
-                                    )
+                                            "GET"=>array("
+                                                    {LA:form:#LA_Titre:options:other:@value}"=>"diplometitre"
+                                                    ,"{LA:form:#LA_Titre:options:other:@data_Id}"=>"idcvparcoursetud"
+                                            )
+                                        )
                              )
             ),
 

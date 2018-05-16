@@ -1,6 +1,6 @@
 <?php
 
-namespace evalLib\Readers;
+namespace library\Readers;
 
 /**
  * Created by PhpStorm.

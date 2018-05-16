@@ -25,34 +25,43 @@ class DBInitCompLoader
         if($CompEval->_RecordDataBase){
 
             $SqlToLoad= $CompEval->_RecordDataBase->getRecordLoad()->getRequests();
-
-
+           // print_r($SqlToLoad);
             foreach ($SqlToLoad as $key => $Sql){
                $sqlString=$Sql->getSql();
+
                $ArrayPrepare= $Sql->getPrepare();
                $Array=[];
                foreach ($ArrayPrepare as $Attrib => $NameInLoad){
-
                    $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
-
-
                }
-                $record=\evalLib\database\dbadapter::SelectWithPrepare($sqlString,$Array);
+                 
+                $record=\library\database\dbadapter::SelectWithPrepare($sqlString,$Array);
+
                 if(count($record)==1){
                     $record=$record[0];
                 }
                 $Binds= $Sql->getBind();
-                foreach ($Binds as $keybind => $varname){
-                    if(isset($record[$keybind])){
-
-                        $this->CompEval->setIn($varname,$record[$keybind]);
+               // echo "<br>";print_r($Binds);
+                foreach ($Binds as $keyType => $varArray){
+                    echo "<br>";
+                    if($keyType == "SET"){
+                        foreach ($varArray as $keybind => $varname) {
+                                if (isset($record[$keybind])) {
+                                    echo $varname . "=>$keybind:" . $record[$keybind];
+                                    $this->CompEval->setIn($varname, $record[$keybind]);
+                                 }
+                            }
+                    }elseif($keyType == "GET"){
+                        foreach ($varArray as $keybind => $varname) {
+                            if (isset($record[$keybind])) {
+                                echo $varname . "=>$keybind:" . $record[$varname];
+                                $this->CompEval->setIn($keybind, $record[$varname]);
+                              }
+                        }
                     }
 
                 }
-
-               print_r($record);
             }
-
 
             foreach ($CompEval as $key => $CompToEval){
 
@@ -65,7 +74,7 @@ class DBInitCompLoader
         }
     }
 
-    public function RedirectForChose(){
+    public function RedirectForChose(RecordSelector $TypeSelector){
 
     }
 

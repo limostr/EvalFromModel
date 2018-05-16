@@ -17,7 +17,7 @@
 ))
 )
  */
-namespace evalLib\MetaRecords;
+namespace evalLib\MetaRecords\RecordDB;
 use evalLib\MetaRecords\Record;
 
 class RecordSelector implements Record
