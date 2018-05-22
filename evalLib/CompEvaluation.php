@@ -13,16 +13,17 @@ use evalLib\MetaRecords\RecordEval;
 
 class CompEvaluation
 {
-    public $_RecordEval;
+    public $_RecordEval ;
     public $_RecordForm;
     public $_RecordDataBase;
+    public $_SubComp=array();
     public $_Formule;
     public $_Template;
     public $_form;
     public $_Parent=Null;
     public $_AutreInformations;
     public $_Model ;
-    public $_SubComp=array();
+
 
     private  $_Original;
     public function __construct($structur,CompEvaluation $Parent=Null)
@@ -69,6 +70,49 @@ class CompEvaluation
                 $this->setSubComp(new CompEvaluation($JDecoded,$this));
             }
         }
+    }
+
+    public function ToNode(){
+        
+        $tree["key"]= $this->_RecordEval->getName();
+        $tree["title"]= $this->_RecordEval->getLabel();
+        $tree["tooltip"]= $this->_RecordEval->getLabel();
+        $tree["folder"]= "false";
+        $tree["iconclass"]="fa fa-file";
+
+        if(is_array($this->_Formule)){
+            foreach ($this->_Formule  as $key => $f){
+                $tree['children'][]=$f->ToNode();
+                $tree["folder"]="true";
+            }
+        }
+
+        if(is_array($this->_Model)){
+            foreach ($this->_Model  as $key => $f){
+                $tree['children'][]=$f->ToNode();
+                $tree["folder"]="true";
+            }
+        }
+
+        if(is_array($this->_form)){
+            foreach ($this->_form  as $key => $f){
+                $tree['children'][]=$f->ToNode();
+                $tree["folder"]="true";
+            }
+        }
+
+        foreach ($this->_SubComp as $key => $node){
+            $tree['children'][]=$node->ToNode();
+            $tree["folder"]="true";
+        }
+        return $tree;
+
+
+    }
+    public function Tree(){
+
+        $tree[]=$this->toNode();
+        return $tree;
     }
 
     private function InitComp($JsonDecode = array()){

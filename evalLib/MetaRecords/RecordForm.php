@@ -146,7 +146,27 @@ class RecordForm implements Record
         $this->_label = $label;
     }
 
+    public function ToNode(){
+        $tree["key"]= $this->_id;
+        $tree["title"]= $this->_name;
+        $tree["tooltip"]= $this->_type.":".$this->_name;
+        $tree["folder"]= "false";
+        $tree["iconclass"]="fa fa-calendar";
+        if(is_array($this->_other)){
+            foreach ($this->_other as $key => $o){
 
+                $bindList=[];
+                $bindList["key"]= $key;
+                $bindList["title"]= $key;
+                $bindList["tooltip"]= $key.":".$o;
+                $bindList["folder"]= "false";
+                $tree['children'][]=$bindList;
+                $tree["iconclass"]="fa fa-tag";
+            }
+        }
+
+        return $tree;
+    }
 
     public function toJson() {}
     public function FromJsonString(string $JsonString){

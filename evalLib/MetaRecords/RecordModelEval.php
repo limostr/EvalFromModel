@@ -185,6 +185,23 @@ class RecordModelEval implements Record
         $this->_Affiche = $Affiche;
     }
 
+
+    public function ToNode(){
+        $tree["key"]= $this->_Name;
+        $tree["title"]= $this->_Label;
+        $tree["tooltip"]= $this->_Label;
+        $tree["folder"]= "false";
+
+        $tree["iconclass"]="fa fa-calendar";
+
+        foreach ($this->_Formule as $key => $f){
+            $tree['children'][]=$f->ToNode();
+            $tree["folder"]="true";
+        }
+
+
+        return $tree;
+    }
     public function toJson() {}
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}

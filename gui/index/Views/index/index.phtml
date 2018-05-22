@@ -1,0 +1,26 @@
+<h1><i class="fa fa-university text-blue"></i> <?=$this->titre?></h1>
+<script type="text/javascript">
+    $(function(){
+        $("#tree").fancytree({
+            extensions: ["childcounter"],
+            source: [<?php $this->Tree ?>],
+            childcounter: {
+                deep: true,
+                hideZeros: true,
+                hideExpanded: true
+            },
+            source: {
+                url: "index2.php?activity=jsontree"
+            },
+            lazyLoad: function(event, data) {
+                data.result = {url: "index2.php?activity=jsontree"}
+            },
+
+            loadChildren: function(event, data) {
+                // update node and parent counters after lazy loading
+                data.node.updateCounters();
+            }
+        });
+    });
+</script>
+<?php echo $this->Tree?>

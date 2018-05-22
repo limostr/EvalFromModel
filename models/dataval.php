@@ -269,7 +269,7 @@ $N1 =array(
         ),
         "Moy"=>array(
             'Name'=>"Moy"
-            ,'Label'=>"Bonus Session"
+            ,'Label'=>"Moyenne"
             ,'Formule'=>array(
                 "F1"=> array(
                     'type'=>'arithmetique'
@@ -367,7 +367,7 @@ $N2 =array(
             ),
             "BM"=>array(
                 'Name'=>"BM"
-                ,'Label'=>"Bonus Session"
+                ,'Label'=>"Bonus Mention"
                 ,'Formule'=>array(
                     "F1"=> array(
                         'type'=>'logique'
@@ -417,7 +417,7 @@ $N2 =array(
             ),
             "Moy"=>array(
                 'Name'=>"Moy"
-                ,'Label'=>"Bonus Session"
+                ,'Label'=>"Moyenne"
                 ,'Formule'=>array(
                     "F1"=> array(
                         'type'=>'arithmetique'

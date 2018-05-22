@@ -1,0 +1,112 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 2 | Top Navigation</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="ressources/bootstrap/css/bootstrap.css">
+    <script src="ressources/bootstrap/js/bootstrap.js"></script>
+
+    <link href="ressources/fancytree/src/skin-win8/ui.fancytree.css" rel="stylesheet">
+    <script src="ressources/fancytree/src/jquery.fancytree.js"></script>
+    <script src="ressources/fancytree/src/jquery.fancytree.childcounter.js"></script>
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<script type="text/javascript">
+    function loadPage(page,zone){
+        $.ajax({
+            type:"POST"
+            ,url:"index.php?activity="+page
+
+            ,beforeSend:function(){
+                $('#'+zone).html("<i class='icon fa fa-gears'></i> chargement Encours...");
+            }
+            ,success:function(reponse){
+                $('#'+zone).html(reponse);
+            }
+        });
+    }
+</script>
+
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <header class="main-header">
+        <nav class="navbar navbar-dark bg-primary">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="brand" href="http://www.uvt.rnu.tn">
+						<span>
+							<object data="ressources/images/logo.svg" type="image/svg+xml"></object>
+						</span>
+                    </a>
+
+                </div>
+
+                <div class="navbar-custom-menu">
+
+                </div>
+                <!-- /.navbar-custom-menu -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+
+                </h1>
+
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-3" id="tree">
+
+                    </div>
+                    <div class="col-md-9">
+                        <?php $this->view->generate(true);?>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b>0
+            </div>
+            <strong>Copyright &copy; 2017-2018 <a href="http://www.uvt.rnu.tn/">UVT</a>.</strong> All rights
+            reserved.
+        </div>
+        <!-- /.container -->
+    </footer>
+</div>
+<!-- ./wrapper -->
+
+
+</html>
+
+
+  

@@ -14,7 +14,7 @@ use evalLib\MetaRecords\Record;
 
 class RecordLoader implements Record
 {
-    public $_Requests;
+    public  $_Requests;
     private $_Table;
     private $_PKey;
     private $_ValuesLoaded;
