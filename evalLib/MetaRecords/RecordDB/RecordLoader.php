@@ -35,10 +35,21 @@ class RecordLoader implements Record
                 $LoderRecord->setSql(isset($sql['sqlstring']) ? $sql['sqlstring'] : "");
                 $LoderRecord->setPrepare(isset($sql['prepare']) ? $sql['prepare'] : "");
                 $LoderRecord->setBind(isset($sql['bind']) ? $sql['bind'] : "");
+
+                $SelectorType=new \evalLib\MetaRecords\RecordDB\RecordSelector();
+                 if(isset($sql['SelectorType'])){
+                     $SelectorType->Init($sql['SelectorType']);
+                     $LoderRecord->setSelectorType($SelectorType);
+                 }else{
+                     $LoderRecord->setSelectorType(Null);
+                 }
+
                 $this->_Requests[$key]=$LoderRecord;
             }
 
         }
+
+
     }
 
     /**

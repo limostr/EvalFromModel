@@ -21,6 +21,7 @@ class RecordEval implements Record
     private $_AutreInformations;//JsonStructur -->Object Notation : StdClass
     private $_Model ;//CompModel
     private $_Affiche="";
+    private $_Parameters;
 
     private $_SubComp=array();
 
@@ -195,6 +196,22 @@ class RecordEval implements Record
     public function setSubComp( $SubComp)
     {
         $this->_SubComp[$SubComp->_Var] = $SubComp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParameters()
+    {
+        return $this->_Parameters;
+    }
+
+    /**
+     * @param mixed $Parameters
+     */
+    public function setParameters($Parameters)
+    {
+        $this->_Parameters = $Parameters;
     }
 
 

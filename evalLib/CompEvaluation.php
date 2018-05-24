@@ -115,6 +115,8 @@ class CompEvaluation
         return $tree;
     }
 
+
+
     private function InitComp($JsonDecode = array()){
 
         $this->_RecordEval=new RecordEval();
@@ -125,6 +127,9 @@ class CompEvaluation
         $this->_RecordEval->setName(isset($JsonDecode['Name']) ? $JsonDecode['Name'] : "");
         $this->_RecordEval->setScore(isset($JsonDecode['Score']) ? $JsonDecode['Score'] : "");
         $this->_RecordEval->setPoid(isset($JsonDecode['Poid']) ? $JsonDecode['Poid'] : "");
+        $this->_RecordEval->setParameters(isset($JsonDecode['parameters']) ? $JsonDecode['parameters'] : "");
+
+
 
         if(isset($JsonDecode['Formule']) && !empty($JsonDecode['Formule'])){
             foreach ($JsonDecode['Formule'] as $keyFormule => $Formule){
@@ -186,6 +191,8 @@ class CompEvaluation
     }
 
 
+
+
     public function setIn($varname,$value){
         $UID=str_ireplace(array("}","{"),"",$varname);
         $var = explode(":",$UID);
@@ -228,6 +235,17 @@ class CompEvaluation
                             $this->setInSpecificObject($var,($i+1),$tmpaccesschane,$valeur);
                         }
                     }
+                }
+                $i+=1;
+                break;
+            case "prepareInit":
+
+                if($var[$i+1][0]=="#"){
+                    $key=str_replace("#","",$var[$i+1]);
+
+                    $ChaineAcces.="->AddPrepareInit('$key',$valeur)";
+
+                    eval("\$this$ChaineAcces;");
                 }
                 $i+=1;
                 break;
@@ -318,7 +336,32 @@ class CompEvaluation
             case "init":
                 $ChaineAcces.="->_Init";
                 break;
+            case "form":
+                $ChaineAcces.="->_form";
+
+                $next_request=$var[$i+1];
+
+                if($next_request[0]=="#"){
+                    $key=str_replace("#","",$next_request);
+                    $ChaineAcces.="['$key']";
+
+                }
+
+                $i+=1;
+                break;
             break;
+            case "options":
+
+
+            break;
+            case "other":
+
+                $key=str_replace("#","",$var[$i+1]);
+                $ChaineAcces.="->setInOther('$key','$valeur')";
+                //echo "\$this$ChaineAcces;";
+                eval("\$this$ChaineAcces;");
+                $i+=1;
+                break;
             default :
                // echo  $ChaineAcces."<br>" ;
               //  echo $var[$i]."<br>";
@@ -525,6 +568,9 @@ class CompEvaluation
         return false;
     }
 
+    public function initValuesFromDB($values){
+
+    }
     public function InitValues($values){
         if(is_array($values)){
             foreach ($values as $key => $value){

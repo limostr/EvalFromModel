@@ -13,7 +13,10 @@ library\database\dbadapter::connect();
 $Comp=new \evalLib\CompEvaluation($LAModel);
 
  $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
-$DataBaseInit->LoadData($Comp);
+
+ $DataBaseInit->initPrepare($_GET);
+ $DataBaseInit->LoadData($Comp);
+//print_r($Comp);
 $formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
 
 ?>
@@ -25,7 +28,7 @@ if(count($_POST)<=0){
     $form->setFormAttrib(new \evalLib\MetaRecords\FormStructer("","Post","Idform","NameForm","form",array("role"=>"form")));
     echo $form;
 }else{
-    print_r($_POST);
+   // print_r($_POST);
     $Comp->InitValues($_POST);
   ///  print_r($Comp);
     $Evaluateur=new \evalLib\Evaluateur($Comp);

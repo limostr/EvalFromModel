@@ -98,6 +98,10 @@ class RecordForm implements Record
         $this->_other = $other;
     }
 
+    public function setInOther($attrib,$value){
+        $this->_other[$attrib] = $value;
+    }
+
     /**
      * @return mixed
      */

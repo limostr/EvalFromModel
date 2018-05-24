@@ -23,13 +23,47 @@ use evalLib\MetaRecords\Record;
 class RecordSelector implements Record
 {
     private $_Multiple;
-    private $_SqlSequence;
     private $_Chose;
+    private $_Bind;
+    private $_Template;
 
     public function Init($Record){
         $this->_Multiple=$Record["Multiple"];
-        $this->_SqlSequence=$Record["SqlSequence"];
-        $this->_Chose=$Record["chose"];
+        $this->_Chose   =$Record["chose"];
+        $this->_Bind    =$Record["bind"];
+        $this->_Template=$Record["template"];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBind()
+    {
+        return $this->_Bind;
+    }
+
+    /**
+     * @param mixed $Bind
+     */
+    public function setBind($Bind)
+    {
+        $this->_Bind = $Bind;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplate()
+    {
+        return $this->_Template;
+    }
+
+    /**
+     * @param mixed $Template
+     */
+    public function setTemplate($Template)
+    {
+        $this->_Template = $Template;
     }
 
     /**
@@ -48,21 +82,7 @@ class RecordSelector implements Record
         $this->_Multiple = $Multiple;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSqlSequence()
-    {
-        return $this->_SqlSequence;
-    }
 
-    /**
-     * @param mixed $SqlSequence
-     */
-    public function setSqlSequence($SqlSequence)
-    {
-        $this->_SqlSequence = $SqlSequence;
-    }
 
     /**
      * @return mixed

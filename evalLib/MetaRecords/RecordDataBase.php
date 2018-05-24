@@ -12,7 +12,7 @@ use evalLib\MetaRecords\Record;
 class RecordDataBase implements Record
 {
     public $_Init;
-    public $_SelectorType;
+
     public $_Record_Load;
     public $_Record_Insert;
 
@@ -24,8 +24,7 @@ class RecordDataBase implements Record
         $this->_Record_Insert->init($RecordDB['insert']);
         $this->_Init=$RecordDB['init'];
 
-        $this->_SelectorType=new \evalLib\MetaRecords\RecordDB\RecordSelector();
-        $this->_SelectorType->Init($RecordDB['SelectorType']);
+
 
 
     }

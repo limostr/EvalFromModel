@@ -14,6 +14,9 @@ class RecordSql implements Record
     private $_Sql;
     private $_Bind;
     private $_Prepare;
+    public  $_SelectorType;
+    private $_RecordSet;
+    private $_PrepareInit=array();
 
     /**
      * @return mixed
@@ -78,6 +81,63 @@ class RecordSql implements Record
             return $this->_Prepare[$KeyName] ;
 
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSelectorType()
+    {
+        return $this->_SelectorType;
+    }
+
+    /**
+     * @param mixed $SelectorType
+     */
+    public function setSelectorType($SelectorType)
+    {
+        $this->_SelectorType = $SelectorType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRecordSet()
+    {
+        return $this->_RecordSet;
+    }
+
+    /**
+     * @param mixed $RecordSet
+     */
+    public function setRecordSet($RecordSet)
+    {
+        $this->_RecordSet = $RecordSet;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrepareInit()
+    {
+        return $this->_PrepareInit;
+    }
+
+    /**
+     * @param mixed $prepareInit
+     */
+    public function setPrepareInit($prepareInit)
+    {
+        $this->_PrepareInit = $prepareInit;
+    }
+
+    public function AddPrepareInit($attrib,$value){
+        $this->_PrepareInit["$attrib"]=$value;
+    }
+
+    public function  UnsetPrepareInit($attrib){
+        unset($this->_PrepareInit["$attrib"]);
+    }
+
 
     public function toJson() {}
     public function FromJsonString(string $JsonString){}

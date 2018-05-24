@@ -20,6 +20,7 @@ use library\Readers\Configuration;
                  //print_r(configuration::$_config);
                  //echo 'mysql:host='.configuration::$_config['host'].';dbname='.configuration::$_config['dbname'];
                 self::$dbh = new \PDO('mysql:host='.configuration::$_config['host'].';dbname='.configuration::$_config['dbname'], configuration::$_config['user'] , configuration::$_config['password']);
+                self::$dbh->exec('SET NAMES utf8');
             } catch (PDOException $e) {
                 print "Erreur !: " . $e->getMessage() . "<br/>";
                 die();
@@ -54,10 +55,16 @@ use library\Readers\Configuration;
             die();
         }
     }
-    public static function SelectWithPrepare($Sql,$dataPrepare=array()){
+    public static function SelectWithPrepare($Sql,$dataPrepare=array(),$Except=""){
         try {
+            //self::connect();
             $data=false;
-
+            if(!empty($Except) && count($dataPrepare)>0){
+                $Sql.=" AND $Except";
+            }elseif(!empty($Except)){
+                $Sql.=" WHERE $Except";
+            }
+             //echo $Sql;
             $stmt = self::$dbh->prepare($Sql);
 
             foreach ($dataPrepare as $Attribi => $ValueAttribi){
@@ -68,8 +75,10 @@ use library\Readers\Configuration;
             $stmt->execute();
 
             $req=$stmt->fetchAll();
+           //  echo $Sql." <br>";
+           // print_r($dataPrepare);
 
-
+           //  print_r($req);
             return $req;
         } catch (PDOException $e) {
             print "Erreur !: $Sql " . $e->getMessage() . "<br/>";
@@ -191,8 +200,8 @@ use library\Readers\Configuration;
     }
 
     public static function Update($table,$record,$where){
-        //self::connect();
-        try {
+
+         try {
 
             //construct data to update
             $Attributs= self::AttributeExtractor($record);
@@ -208,7 +217,7 @@ use library\Readers\Configuration;
             }
 
             $stmt=self::$dbh->prepare("UPDATE $table SET $valueParam WHERE $WhereParam");
-//echo "UPDATE $table SET $valueParam WHERE $WhereParam";
+
             foreach ($Attributs as $Attrib=>$ValueAttrib){
                 $stmt->bindValue( ":$Attrib" , $ValueAttrib);
             }
@@ -218,11 +227,14 @@ use library\Readers\Configuration;
             }
 
             $res= $stmt->execute();
+
             return $res;
+
         } catch (PDOException $e) {
             throw new Exception("Erreur ! prepare data to insert $table : " . $e->getMessage());
 
         }
+
     }
 
 }

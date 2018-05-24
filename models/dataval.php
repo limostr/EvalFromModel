@@ -36,20 +36,13 @@ $EvalModelData=array(
 //diplome Licence Appliquee
 $LA =array(
      'Name'=>"LA"
+    ,"parameters"=>array(
+        "id"=>"{LA:database:loader:sql:#s2:prepareInit:#idcvparcoursetud}"
+    )
     ,"database"=>array(
-        'SelectorType'=>array(
-            'Multiple'=>0
-            ,'SqlSequence'=>"s1"
-            ,'chose'=>array(
-                'typediplome'=>array('IN'=>array(
-                    'Fondamentale',
-                    'Appliqué',
-                    'DUT'
-                ))
-            )
-        )
-        ,"init"=>array(
-            "idUser"=>8
+
+         "init"=>array(
+            "idUser"=>7
         ),
         "loader"=>array(
             "table"=>"cvparcoursetud"
@@ -66,7 +59,8 @@ $LA =array(
                                          "SET"=>array(
                                              "idcandidatcv"=>"{LA:database:loader:sql:#s2:prepare:#idcandidatcv}"
                                          )
-                                     )
+                                     ),
+                            'recordset'=>[]
                         )
                     ,"s2"=>
                         array(
@@ -74,13 +68,78 @@ $LA =array(
                                 ,"prepare"=>array(
                                     "idcandidatcv"=>""
                                 )
+                                ,"prepareInit"=>array(
+
+                                )
                                 ,"bind"=>array(
-                                            "GET"=>array("
-                                                    {LA:form:#LA_Titre:options:other:@value}"=>"diplometitre"
-                                                    ,"{LA:form:#LA_Titre:options:other:@data_Id}"=>"idcvparcoursetud"
+                                            "GET"=>array(
+                                                "{LA:AutreInformations:@titre}"=>"diplometitre"
+                                                ,"{LA:AutreInformations:@id}"=>"idcvparcoursetud"
+                                                ,"{LA:AutreInformations:@nbrredouble}"=>"idcvparcoursetud"
+                                            ),
+                                            "SET"=>array(
+                                                "idcvparcoursetud"=>"{LA:database:loader:sql:#s3:prepare:#idcvparcoursetud}"
+                                            )
+                                        ),
+                                'SelectorType'=>array(
+                                'Multiple'=>1
+                                ,'chose'=>array(
+                                    'typediplome'=>array(
+                                        'IN'=>array(
+                                            'Fondamentale',
+                                            'Appliqué',
+                                            'DUT'
+                                        )
+                                    )
+                                )
+                                ,"bind"=>array(
+                                    "diplometitre"=>"{Label}"
+                                    ,"idcvparcoursetud"=>"{id}"
+                                ),
+                                "template"=>array(
+                                    "message"=>"Choisir un dplôme"
+                                    ,"template"=>"<br><b><a href='index.php?id={id}'>{Label}</a></b>"
+                                )
+                            ),
+                                'recordset'=>[]
+                             )
+                    ,"s3"=>
+                        array(
+                                "sqlstring"=>"SELECT * FROM detailsparcoursetud WHERE idcvparcoursetud=:idcvparcoursetud"
+                                ,"prepare"=>array(
+                                    "idcvparcoursetud"=>""
+                                )
+                                ,"prepareInit"=>array(
+
+                                )
+                                ,"bind"=>array(
+                                    "GET"=>array(
+                                        "records"=>array(
+                                            "{LA:SubComp:#N?:@Score}"=>"moyenne"
+                                            ,"{LA:SubComp:#N?:AutreInformations:@session}"=>"session"
+                                        )
+                                    )
+                                ),
+                            'SelectorType'=>array(
+                                    'Multiple'=>0
+                                    ,'chose'=>array(
+                                            'idniveauparcours'=>array(
+                                                'IN'=>array(
+                                                    'Niveau 1',
+                                                    'Niveau 2'
+                                                )
                                             )
                                         )
-                             )
+                                    ,"bind"=>array(
+
+                                    ),
+                                    "template"=>array(
+                                        "message"=>" "
+                                        ,"template"=>" "
+                                    )
+                                ),
+                                    'recordset'=>[]
+                                )
             ),
 
 
@@ -91,7 +150,6 @@ $LA =array(
             )
             ,'table'=>''
             ,'updateCondetion'=>''
-
         )
     )
     ,'Label'=>"Parcours Licence Appliquée"
@@ -114,10 +172,10 @@ $LA =array(
     ,'description'=>""
     ,'decision'=>""
     ,'SubComp'=>[]
-    ,'AutreInformations'=>""
+    ,'AutreInformations'=>array("titre"=>"","nbrredouble"=>"","id"=>"")
     ,'Model'=>array()
     ,'form'=>array(
-        "LA_Titre"=>array(
+        "{LA:AutreInformations:@titre}"=>array(
             "type"=>"textarea"
             ,"options"=>array(
                 "class"=>array()
@@ -130,6 +188,31 @@ $LA =array(
              )
             ,"name"=>"LA_Titre"
             ,"label"=>"Titre: "
+        ),
+        "{LA:AutreInformations:@nbrredouble}"=>array(
+            "type"=>"number"
+            ,"options"=>array(
+                "other"=>array(
+                    "value"=>""
+                    ,'min'=>0
+                    ,"placeholder"=>"0"
+                    ,"required"=>"required"
+                    ,"step"=>"0"
+                    ,"title"=>"Nombre d'année de redoublemment"
+
+                )
+            )
+                ,"name"=>"Nbr_Redouble"
+                ,"label"=>"Moyenne 1ére année: "
+            ),"{LA:AutreInformations:@id}"=>array(
+                "type"=>"hidden"
+                ,"options"=>array(
+                        "other"=>array(
+                                "value"=>""
+                        )
+                )
+            ,"name"=>"Id cv parcour"
+            ,"label"=>"Id cv parcour"
         )
     )
     ,"template"=>array(
