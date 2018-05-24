@@ -64,7 +64,7 @@ use library\Readers\Configuration;
             }elseif(!empty($Except)){
                 $Sql.=" WHERE $Except";
             }
-             //echo $Sql;
+              //echo $Sql."<br>";
             $stmt = self::$dbh->prepare($Sql);
 
             foreach ($dataPrepare as $Attribi => $ValueAttribi){

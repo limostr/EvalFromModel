@@ -15,13 +15,13 @@ class RecordInsert implements Record
 
     private $_Bind;
     private $_Table;
-    private $_UpdateCondetion;
+    private $_UpdateCondition;
 
 
     public function init($RecordInsert){
         $this->_Bind=$RecordInsert['bind'];
         $this->_Table=$RecordInsert['table'];
-        $this->_UpdateCondetion=$RecordInsert['updateCondetion'];
+        $this->_UpdateCondition=$RecordInsert['updateCondition'];
     }
 
 
@@ -60,17 +60,17 @@ class RecordInsert implements Record
     /**
      * @return mixed
      */
-    public function getUpdateCondetion()
+    public function getUpdateCondition()
     {
-        return $this->_UpdateCondetion;
+        return $this->_UpdateCondition;
     }
 
     /**
      * @param mixed $UpdateCondetion
      */
-    public function setUpdateCondetion($UpdateCondetion)
+    public function setUpdateCondition($UpdatiCondetion)
     {
-        $this->_UpdateCondetion = $UpdateCondetion;
+        $this->_UpdateCondition = $UpdateCondition;
     }
 
 

@@ -114,6 +114,9 @@ class FormEvaluation{
                     case "submit":
                         $this->form.=$this->setSubmit($name,$id,$label);
                         break;
+                    case "hidden":
+                        $this->form.=$this->setHidden($elt,$_InitValue);
+                        break;
 
                     default:
                         $this->form.=$this->setOtherInput($elt,$_InitValue);
@@ -149,6 +152,13 @@ class FormEvaluation{
         return $select;
     }
 
+    public function setHidden(RecordForm $elt,$_InitValue){
+        $class=$this->DetectClass($elt->getClass());
+        $other=$this->DetectOtherAttrib($elt->getOther());
+
+         $select ="<input type=\"hidden\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+        return $select;
+    }
     public function setOtherInput(RecordForm $elt,$_InitValue){
 
         $class=$this->DetectClass($elt->getClass());

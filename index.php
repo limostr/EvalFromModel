@@ -1,4 +1,4 @@
-<pre>
+
 <?php
 
 include "Autoloader.php";
@@ -39,12 +39,9 @@ if(count($_POST)<=0){
    echo $Vue->genVue(file_get_contents(dirname(__FILE__)."/view/relever.phtml"));
 
 }
-
 /*$Comp=new \evalLib\CompEvaluation($ue);
 
 $Evaluateur=new \evalLib\Evaluateur($Comp);
 $form = new \evalLib\FormEvaluation($Comp);
 echo $form;*/
 ?>
-
-</pre>

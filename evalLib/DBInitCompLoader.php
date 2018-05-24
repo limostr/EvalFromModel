@@ -42,29 +42,33 @@ class DBInitCompLoader
             foreach ($SqlToLoad as $key => $Sql){
 
                 if($Sql->_SelectorType){
-                    $has=$this->RedirectForChose($Sql,$html);
-                    if($has){
-                        echo $html;
-                        return;
-                    }
-                }elseif($Sql->_SelectorType==0){
-                    $Chose= $Sql->_SelectorType->getChose();
+                    $MultipleSelect=$Sql->_SelectorType->getMultiple();
+                    if($MultipleSelect==1){
+                        $has=$this->RedirectForChose($Sql,$html);
+                        if($has){
+                            echo $html;
+                            return;
+                        }
+                    }elseif($MultipleSelect==0){
+                        $Chose= $Sql->_SelectorType->getChose();
 
-                    foreach ($Chose as $attrib => $liste){
-                        foreach ($liste as $typeSelect => $AttribElt){
-                            switch ($typeSelect){
-                                case "IN":
-                                    $listSelect.= !empty($listSelect) ? " AND $attrib IN ('".implode("','",$AttribElt)."')" : " $attrib IN ('".implode("','",$AttribElt)."')";
-                                    break;
-                                case "NOTIN":
-                                    $listSelect.= !empty($listSelect) ? " AND $attrib NOT IN ('".implode("','",$AttribElt)."')" : " $attrib NOT IN ('".implode("','",$AttribElt)."')";
-                                    break;
-                                case "SIMPLE":
-                                    $listSelect.=!empty($listSelect) ? "   AND $attrib='$AttribElt' " : " $attrib='$AttribElt' ";
-                                    break;
+                        foreach ($Chose as $attrib => $liste){
+                            foreach ($liste as $typeSelect => $AttribElt){
+                                switch ($typeSelect){
+                                    case "IN":
+                                        $listSelect.= !empty($listSelect) ? " AND $attrib IN ('".implode("','",$AttribElt)."')" : " $attrib IN ('".implode("','",$AttribElt)."')";
+                                        break;
+                                    case "NOTIN":
+                                        $listSelect.= !empty($listSelect) ? " AND $attrib NOT IN ('".implode("','",$AttribElt)."')" : " $attrib NOT IN ('".implode("','",$AttribElt)."')";
+                                        break;
+                                    case "SIMPLE":
+                                        $listSelect.=!empty($listSelect) ? "   AND $attrib='$AttribElt' " : " $attrib='$AttribElt' ";
+                                        break;
+                                }
                             }
                         }
                     }
+
                 }
 
                $sqlString=$Sql->getSql();
@@ -72,7 +76,8 @@ class DBInitCompLoader
                $ArrayPrepare= $Sql->getPrepare();
                $Array=[];
                foreach ($ArrayPrepare as $Attrib => $NameInLoad){
-                   if($NameInLoad[0]=="{"){
+
+                   if(isset($NameInLoad[0]) && $NameInLoad[0]=="{"){
                        $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
                    }else{
                        $Array[$Attrib]=$NameInLoad;
@@ -81,7 +86,6 @@ class DBInitCompLoader
                }
 
                 $PreapareInit=$Sql->getPrepareInit();
-
 
                 if(count($PreapareInit)>0){
 
@@ -95,13 +99,13 @@ class DBInitCompLoader
                         }
                     }
                 }
-                 echo $listSelect."<br>";
+
                 $record=\library\database\dbadapter::SelectWithPrepare($sqlString,$Array,$listSelect);
 
 
 
                 $Binds= $Sql->getBind();
-               // print_r($record);
+                // print_r($record);
 
                 if(count($record)==1){
                     $record=$record[0];
@@ -116,7 +120,6 @@ class DBInitCompLoader
                                  }
                             }
                     }elseif($keyType == "GET"){
-
                         if(isset($varArray["records"])){
                             $i=1;
                             foreach ($record as $rec){
@@ -124,18 +127,16 @@ class DBInitCompLoader
                                     $keytemplate=$keybind;
                                     if (isset($rec[$varname])) {
                                         $keyt=str_ireplace("?",$i,$keytemplate);
+                                        //echo $keyt."<br>";
                                         $this->CompEval->setIn($keyt, $rec[$varname]);
                                     }
                                 }
                                 $i+=1;
                             }
                         }else{
-
                             foreach ($varArray as $keybind => $varname) {
-
                                 if (isset($record[$varname])) {
                                      $this->CompEval->setIn($keybind, $record[$varname]);
-
                                 }
                             }
                         }
@@ -208,15 +209,16 @@ class DBInitCompLoader
                     }
                 }
                 //print_r($sqlString);
-             /*   echo "<pre style='color:red'>";
+                /* echo "<pre style='color:red'>";
                 echo $sqlString."<br>";
                 print_r($listSelect);
-                print_r($PreapareInit);
-                echo "</pre>";*/
+                print_r($PreapareInit);*/
+
 
                 $record=\library\database\dbadapter::SelectWithPrepare($sqlString,$Array,$listSelect);
 
-
+               // print_r($record);
+               // echo "</pre>";
 
 
                 $has=count($record)>1 ? true : false;
