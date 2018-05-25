@@ -82,21 +82,42 @@ class CompEvaluation
 
         if(is_array($this->_Formule)){
             foreach ($this->_Formule  as $key => $f){
-                $tree['children'][]=$f->ToNode();
+                $Node["key"]= "_Formule_";
+                $Node["title"]= "Formule";
+                $Node["tooltip"]= "Formule";
+                $Node["folder"]= "true";
+                $Node["iconclass"]="fa fa-file";
+
+                $Node['children'][]=$f->ToNode();
+                $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
         }
 
         if(is_array($this->_Model)){
             foreach ($this->_Model  as $key => $f){
-                $tree['children'][]=$f->ToNode();
+                $Node["key"]= "_Model_";
+                $Node["title"]= "Model";
+                $Node["tooltip"]= "Model";
+                $Node["folder"]= "true";
+                $Node["iconclass"]="fa fa-file";
+
+                $Node['children'][]=$f->ToNode();
+                $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
         }
 
         if(is_array($this->_form)){
             foreach ($this->_form  as $key => $f){
-                $tree['children'][]=$f->ToNode();
+                $Node["key"]= "_Form_";
+                $Node["title"]= "Formulaire";
+                $Node["tooltip"]= "Formulaire";
+                $Node["folder"]= "true";
+                $Node["iconclass"]="fa fa-file";
+
+                $Node['children'][]=$f->ToNode();
+                $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
         }

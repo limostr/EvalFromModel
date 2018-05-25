@@ -32,6 +32,28 @@ class DBInitCompLoader
         }
     }
 
+    public function PrepareForInsert(){
+        $Inserts=$this->CompEval->_RecordDataBase->_Record_Insert;
+        foreach ($Inserts as $key =>$Insert){
+            if(isset($Inserts['bind']['DATA'])){
+                foreach ($Inserts['DATA'] as $typekey => $binddata){
+                    if($typekey!="records"){
+                        $value=$this->CompEval->lookForVariable($binddata);
+                        //$this->CompEval->_RecordDataBase->_Record_Insert['$key']
+                        //$this->CompEval->setIn($binddata,$value);
+                    }
+                }
+            }
+
+        }
+    }
+
+    public function insertData(){
+
+    }
+
+
+
     public function LoadData(CompEvaluation $CompEval){
 
         if($CompEval->_RecordDataBase){
@@ -102,8 +124,6 @@ class DBInitCompLoader
 
                 $record=\library\database\dbadapter::SelectWithPrepare($sqlString,$Array,$listSelect);
 
-
-
                 $Binds= $Sql->getBind();
                 // print_r($record);
 
@@ -140,9 +160,7 @@ class DBInitCompLoader
                                 }
                             }
                         }
-
                     }
-
                 }
             }
 

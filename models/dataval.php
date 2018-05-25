@@ -148,15 +148,34 @@ $LA =array(
         'insert'=>array(
             "s1"=>array(
                 'bind'=>array(
-                    "GET"=>array(
-
+                    "DATA"=>array(
+                        "diplometitre"=>"{LA:AutreInformations:@titre}"
                     )
                     ,"SET"=>array(
-
+                        "idcvparcoursetud"=>"{LA:database:loader:sql:#s3:prepare:#idcvparcoursetud}"
                     )
                 )
-                ,'table'=>''
-                ,'updateCondition'=>''
+                ,'table'=>'cvparcoursetud'
+                ,'updateCondition'=>array(
+                    "idcvparcoursetud"=>""
+                )
+            )
+            ,"s2"=>array(
+                'bind'=>array(
+                    "DATA"=>array(
+                        "records"=>array(
+                            "moyenne"=>"{LA:SubComp:#N?:@Score}"
+                            ,"session"=>"{LA:SubComp:#N?:AutreInformations:@session}"
+                             ,"idcvparcoursetud"=>""
+                        )
+                     )
+                )
+                ,'table'=>'detailsparcoursetud'
+                ,'updateCondition'=>array(
+                    "records"=>array(
+                        "iddetailsparcoursetud"=>"{LA:SubComp:#N?:AutreInformations:@id}"
+                    )
+                 )
             ),
 
         )
@@ -431,17 +450,17 @@ $N2 =array(
                 ,"options"=>array(  )
                 ,"name"=>"{LA:SubComp:#N2:AutreInformations:@session}"
                 ,"label"=>"Session: "
-            ),"{LA:SubComp:#N2:AutreInformations:@id}"=>array(
-            "type"=>"hidden"
-            ,"options"=>array(
-                    "other"=>array(
-                        "value"=>""
+            )
+            ,"{LA:SubComp:#N2:AutreInformations:@id}"=>array(
+                "type"=>"hidden"
+                ,"options"=>array(
+                        "other"=>array(
+                            "value"=>""
+                        )
                     )
-                )
-        ,"name"=>"{LA:SubComp:#N2:AutreInformations:@id}"
-        ,"label"=>"Id Detail parcours"
-        )
-
+                ,"name"=>"{LA:SubComp:#N2:AutreInformations:@id}"
+                ,"label"=>"Id Detail parcours"
+            )
         )
 
     ,'Model'=>array(
