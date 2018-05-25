@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4b5cd00c-d0ae-4f23-a1da-7e17e93e4069" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evalLib/CompEvaluation.php" beforeDir="false" afterPath="$PROJECT_DIR$/evalLib/CompEvaluation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evalLib/DBInitCompLoader.php" beforeDir="false" afterPath="$PROJECT_DIR$/evalLib/DBInitCompLoader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/dataval.php" beforeDir="false" afterPath="$PROJECT_DIR$/models/dataval.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php" beforeDir="false" afterPath="$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -45,8 +43,8 @@
       <file leaf-file-name="DBInitCompLoader.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evalLib/DBInitCompLoader.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+            <state relative-caret-position="529">
+              <caret line="47" column="54" selection-start-line="47" selection-start-column="54" selection-end-line="47" selection-end-column="54" />
               <folding>
                 <element signature="e#112#158#0#PHP" expanded="true" />
               </folding>
@@ -57,8 +55,8 @@
       <file leaf-file-name="dataval.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/dataval.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="151" column="71" selection-start-line="151" selection-start-column="71" selection-end-line="151" selection-end-column="71" />
+            <state relative-caret-position="486">
+              <caret line="158" column="33" selection-start-line="158" selection-start-column="18" selection-end-line="158" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -74,7 +72,11 @@
       </file>
       <file leaf-file-name="RecordInsert.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file leaf-file-name="RecordEval.php" pinned="false" current-in-tab="false">
@@ -109,6 +111,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="4158">
               <caret line="165" column="52" selection-start-line="165" selection-start-column="52" selection-end-line="165" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dbadapter.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/library/database/dbadapter.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="631">
+              <caret line="218" column="86" selection-start-line="218" selection-start-column="75" selection-end-line="218" selection-end-column="86" />
             </state>
           </provider>
         </entry>
@@ -178,10 +189,10 @@
         <option value="$PROJECT_DIR$/library/database/dbadapter.php" />
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/evalLib/FormEvaluation.php" />
-        <option value="$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php" />
         <option value="$PROJECT_DIR$/evalLib/MetaRecords/RecordDataBase.php" />
         <option value="$PROJECT_DIR$/evalLib/CompEvaluation.php" />
         <option value="$PROJECT_DIR$/models/dataval.php" />
+        <option value="$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php" />
         <option value="$PROJECT_DIR$/evalLib/DBInitCompLoader.php" />
       </list>
     </option>
@@ -270,7 +281,7 @@
       <workItem from="1526372919806" duration="27145000" />
       <workItem from="1526895046321" duration="52718000" />
       <workItem from="1527194504293" duration="4241000" />
-      <workItem from="1527229353889" duration="6923000" />
+      <workItem from="1527229353889" duration="8230000" />
     </task>
     <task id="LOCAL-00001" summary="Documentation first test">
       <created>1526252758968</created>
@@ -283,7 +294,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118753000" />
+    <option name="totallyTimeSpent" value="120060000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1928" height="1044" extended-state="6" />
@@ -576,13 +587,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/library/database/dbadapter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1782">
-          <caret line="66" column="16" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/evalLib/MetaRecords/RecordForm.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2538">
@@ -625,9 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/evalLib/MetaRecords/RecordDataBase.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
@@ -635,17 +636,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/evalLib/MetaRecords/RecordDB/RecordInsert.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/models/dataval.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="151" column="71" selection-start-line="151" selection-start-column="71" selection-end-line="151" selection-end-column="71" />
+        <state relative-caret-position="486">
+          <caret line="158" column="33" selection-start-line="158" selection-start-column="18" selection-end-line="158" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/database/dbadapter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="631">
+          <caret line="218" column="86" selection-start-line="218" selection-start-column="75" selection-end-line="218" selection-end-column="86" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/evalLib/DBInitCompLoader.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+        <state relative-caret-position="529">
+          <caret line="47" column="54" selection-start-line="47" selection-start-column="54" selection-end-line="47" selection-end-column="54" />
           <folding>
             <element signature="e#112#158#0#PHP" expanded="true" />
           </folding>

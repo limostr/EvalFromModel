@@ -32,25 +32,41 @@ class DBInitCompLoader
         }
     }
 
-    public function PrepareForInsert(){
+    public function insertData(){
         $Inserts=$this->CompEval->_RecordDataBase->_Record_Insert;
         foreach ($Inserts as $key =>$Insert){
             if(isset($Inserts['bind']['DATA'])){
+                $i=1;
+                $dataToInsert=[];
                 foreach ($Inserts['DATA'] as $typekey => $binddata){
                     if($typekey!="records"){
+                        foreach ($Inserts['DATA']['records'] as $){
+
+                        }
+                        $keyt=str_ireplace("?",$i,$binddata);
+                        $value=$this->CompEval->lookForVariable($keyt);
+                        $dataToInsert[$typekey]=$value;
+                    }else{
                         $value=$this->CompEval->lookForVariable($binddata);
-                        //$this->CompEval->_RecordDataBase->_Record_Insert['$key']
-                        //$this->CompEval->setIn($binddata,$value);
+                        $dataToInsert[$typekey]=$value;
                     }
+                    $i+=1;
                 }
+                if(count($dataToInsert)>=1){
+                    if(['updateCondition']){
+                        \library\database\dbadapter::Update($Inserts['table'],$dataToInsert,$where);
+                    }else{
+                        \library\database\dbadapter::Insert($Inserts['table'],$dataToInsert);
+                    }
+
+                }
+
             }
 
         }
     }
 
-    public function insertData(){
 
-    }
 
 
 

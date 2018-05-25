@@ -24,6 +24,14 @@ class RecordInsert implements Record
         $this->_UpdateCondition=$RecordInsert['updateCondition'];
     }
 
+    public function setInBindData($keytype,$value){
+
+    }
+
+    public function setInBindRecordsData(){
+
+    }
+
 
     /**
      * @return mixed
@@ -70,7 +78,7 @@ class RecordInsert implements Record
      */
     public function setUpdateCondition($UpdatiCondetion)
     {
-        $this->_UpdateCondition = $UpdateCondition;
+        $this->_UpdateCondition = $UpdatiCondition;
     }
 
 
