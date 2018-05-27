@@ -31,8 +31,16 @@ if(count($_POST)<=0){
    // print_r($_POST);
     $Comp->InitValues($_POST);
   ///  print_r($Comp);
+    ///
+    ///
+
+
     $Evaluateur=new \evalLib\Evaluateur($Comp);
     $Evaluateur->Evaluation();
+
+    $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+
+    $DataBaseInit->InsertInDB($Comp);
 
     $Vue=new \evalLib\ViewGen($Comp);
     $Vue->_InitValue();

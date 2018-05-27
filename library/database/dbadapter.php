@@ -204,29 +204,41 @@ use library\Readers\Configuration;
          try {
 
             //construct data to update
-            $Attributs= self::AttributeExtractor($record);
+             if($record instanceof \stdClass){
+                 $Attributs= self::AttributeExtractor($record);
+             }elseif(is_array($record)){
+                 $Attributs=$record;
+             }
+
             $valueParam="";
             foreach ($Attributs as $Attrib=>$ValueAttrib){
+
                 $valueParam.=empty($valueParam) ? "$Attrib=:$Attrib" : ",$Attrib=:$Attrib";
             }
             ///construct where data
-            $AttributsWhere= self::AttributeExtractor($where);
+              if($where instanceof \stdClass){
+                 $AttributsWhere= self::AttributeExtractor($where);
+             }elseif(is_array($where)){
+                 $AttributsWhere=$where;
+             }
             $WhereParam="";
             foreach ($AttributsWhere as $Attrib=>$ValueAttrib){
+
                 $WhereParam.=empty($WhereParam) ? "$Attrib=:$Attrib" : " AND $Attrib=:$Attrib";
             }
 
             $stmt=self::$dbh->prepare("UPDATE $table SET $valueParam WHERE $WhereParam");
-
+print_r($Attributs);
             foreach ($Attributs as $Attrib=>$ValueAttrib){
+
                 $stmt->bindValue( ":$Attrib" , $ValueAttrib);
             }
 
             foreach ($AttributsWhere as $Attrib=>$ValueAttrib){
+
                 $stmt->bindValue( ":$Attrib" , $ValueAttrib);
             }
-
-            $res= $stmt->execute();
+              $res= $stmt->execute();
 
             return $res;
 

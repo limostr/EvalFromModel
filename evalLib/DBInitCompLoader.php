@@ -31,35 +31,64 @@ class DBInitCompLoader
             $this->CompEval->setIn($params[$param],$value);
         }
     }
+    public function constructDataInSub($Comp,$Data){
 
-    public function insertData(){
-        $Inserts=$this->CompEval->_RecordDataBase->_Record_Insert;
-        foreach ($Inserts as $key =>$Insert){
-            if(isset($Inserts['bind']['DATA'])){
-                $i=1;
+    }
+
+    public function InsertInDB($CompEval){
+        $this->insertData($CompEval);
+        foreach ($CompEval->_SubComp as $sub => $comp){
+            $this->InsertInDB($comp);
+        }
+    }
+
+    public function insertData($CompEval){
+        $Inserts=$CompEval->_RecordDataBase->_Record_Insert;
+        foreach ($Inserts as $key =>$InsertObj){
+
+            $Insert=$InsertObj->getBind();
+
+            if(isset($Insert['DATA'])){
+
                 $dataToInsert=[];
-                foreach ($Inserts['DATA'] as $typekey => $binddata){
-                    if($typekey!="records"){
-                        foreach ($Inserts['DATA']['records'] as $){
+                foreach ($Insert['DATA'] as $typekey => $binddata){
+                    if($typekey=="records"){
+                        echo "<pre style='color:red'>";print_r($binddata);echo "</pre>";
+                        $dataTemp=[];
 
+                        foreach ($binddata as $RecName => $AttribLooK){
+                            $value=$this->CompEval->lookForVariable($AttribLooK);
+                            $dataTemp[$RecName]=$value;
                         }
-                        $keyt=str_ireplace("?",$i,$binddata);
-                        $value=$this->CompEval->lookForVariable($keyt);
-                        $dataToInsert[$typekey]=$value;
+                        $dataToInsert=$dataTemp;
                     }else{
                         $value=$this->CompEval->lookForVariable($binddata);
                         $dataToInsert[$typekey]=$value;
                     }
-                    $i+=1;
+
                 }
-                if(count($dataToInsert)>=1){
-                    if(['updateCondition']){
-                        \library\database\dbadapter::Update($Inserts['table'],$dataToInsert,$where);
-                    }else{
-                        \library\database\dbadapter::Insert($Inserts['table'],$dataToInsert);
+
+                //update ids
+                $ArrayUpdateData=[];
+                $UpdateData=$InsertObj->getUpdateCondition();
+                foreach ($UpdateData as $attribUpdate => $updateVar){
+                    $updateValure=$this->CompEval->lookForVariable($updateVar);
+                    if(!empty($updateValure)){
+                        $ArrayUpdateData[$attribUpdate]=$updateValure;
                     }
 
                 }
+                echo "<pre style='color:#1c7430'>";print_r($dataToInsert);echo "</pre>";
+                echo "<pre style='color:#0b2e13;'>";print_r($ArrayUpdateData);echo "</pre>";
+                if(count($dataToInsert)>0){
+                    if(count($ArrayUpdateData)>=1){
+                        \library\database\dbadapter::Update($InsertObj->getTable(),$dataToInsert,$ArrayUpdateData);
+                    }else{
+                        \library\database\dbadapter::Insert($InsertObj->getTable(),$dataToInsert);
+                    }
+                }
+
+
 
             }
 

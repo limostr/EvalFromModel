@@ -18,14 +18,14 @@ class RecordDataBase implements Record
 
     public function Init($RecordDB){
         $this->_Record_Load=new  \evalLib\MetaRecords\RecordDB\RecordLoader();
-        $this->_Record_Load->init($RecordDB['loader']);
+        $this->_Record_Load->init(isset($RecordDB['loader']) ? $RecordDB['loader']:array() );
 
         foreach ($RecordDB['insert'] as $keyinsert => $valinsert){
             $this->_Record_Insert[$keyinsert]=new \evalLib\MetaRecords\RecordDB\RecordInsert();
             $this->_Record_Insert[$keyinsert]->init($valinsert);
 
         }
-        $this->_Init=$RecordDB['init'];
+        $this->_Init=isset($RecordDB['init']) ? $RecordDB['init'] : "";
 
     }
 

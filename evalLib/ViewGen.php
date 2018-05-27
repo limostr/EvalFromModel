@@ -92,6 +92,7 @@ class ViewGen
 
             $use = "use evalLib\\MethodEval;";
             $res=null;
+            //echo "\$res=$formule" ;
             eval("$use;\$res=$formule;");
             return $res;
         }

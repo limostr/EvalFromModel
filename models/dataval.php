@@ -6,7 +6,6 @@
  * Time: 13:24
  */
 
-
 $modelData =array(
     'Name'
     ,'Label'
@@ -41,7 +40,7 @@ $LA =array(
     )
     ,"database"=>array(
 
-         "init"=>array(
+        "init"=>array(
             "idUser"=>7
         ),
         "loader"=>array(
@@ -157,27 +156,10 @@ $LA =array(
                 )
                 ,'table'=>'cvparcoursetud'
                 ,'updateCondition'=>array(
-                    "idcvparcoursetud"=>""
+                    "idcvparcoursetud"=>"{LA:AutreInformations:@id}"
                 )
-            )
-            ,"s2"=>array(
-                'bind'=>array(
-                    "DATA"=>array(
-                        "records"=>array(
-                            "moyenne"=>"{LA:SubComp:#N?:@Score}"
-                            ,"session"=>"{LA:SubComp:#N?:AutreInformations:@session}"
-                             ,"idcvparcoursetud"=>""
-                        )
-                     )
-                )
-                ,'table'=>'detailsparcoursetud'
-                ,'updateCondition'=>array(
-                    "records"=>array(
-                        "iddetailsparcoursetud"=>"{LA:SubComp:#N?:AutreInformations:@id}"
-                    )
-                 )
-            ),
 
+            )
         )
     )
     ,'Label'=>"Parcours Licence Appliquée"
@@ -262,6 +244,27 @@ $LA =array(
 $N1 =array(
     'Name'=>"N1"
     ,'Label'=>"1 année"
+    ,"database"=>array(
+        'insert'=>array(
+         "s2"=>array(
+                'bind'=>array(
+                    "DATA"=>array(
+                        "records"=>array(
+                            "moyenne"=>"{LA:SubComp:#N1:@Score}"
+                            ,"session"=>"{LA:SubComp:#N1:AutreInformations:@session}"
+                        )
+                    )
+                )
+            ,'table'=>'detailsparcoursetud'
+            ,'updateCondition'=>array(
+                        "iddetailsparcoursetud"=>"{LA:SubComp:#N1:AutreInformations:@id}"
+
+                )
+
+            ),
+        )
+
+    )
     ,"Affiche"=>0
     ,'Formule'=>array()
     ,'Score'=>12.25
@@ -414,6 +417,26 @@ $N1 =array(
 ///Niveau1 Licence Appliquer
 $N2 =array(
      'Name'=>"N2"
+    ,"database"=>array(
+        'insert'=>array(
+            "s2"=>array(
+                'bind'=>array(
+                    "DATA"=>array(
+                        "records"=>array(
+                            "moyenne"=>"{LA:SubComp:#N2:@Score}"
+                            ,"session"=>"{LA:SubComp:#N2:AutreInformations:@session}"
+                        )
+                    )
+                )
+            ,'table'=>'detailsparcoursetud'
+            ,'updateCondition'=>array(
+                "iddetailsparcoursetud"=>"{LA:SubComp:#N2:AutreInformations:@id}"
+             )
+
+            ),
+        )
+
+    )
     ,'Label'=>"2 année"
     ,"Affiche"=>0
     ,'Formule'=>array()
@@ -422,7 +445,7 @@ $N2 =array(
     ,'description'=>""
     ,'decision'=>""
     ,'SubComp'=>[]
-    ,'AutreInformations'=>array("session"=>"Principale")
+    ,'AutreInformations'=>array("session"=>"Principale",'id'=>"")
     ,'form'=>
         array(
             "{LA:SubComp:#N2:@Score}"=> array(
@@ -529,15 +552,15 @@ $N2 =array(
                     ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
                     ),
                     "F4"=> array(
-                        'type'=>'logique'
-                    ,'nature'=>"else"
-                    ,'toEval'=>"{LA:SubComp:#N2:@Score}>=16"
-                    ,"score"=>array("true"=>4,"false"=>0)
-                    ,"default"=>0
-                    ,"description"=>""
-                    ,"decision"=>"Trés Bien"
-                    ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
-                    )
+                            'type'=>'logique'
+                            ,'nature'=>"else"
+                            ,'toEval'=>"{LA:SubComp:#N2:@Score}>=16"
+                            ,"score"=>array("true"=>4,"false"=>0)
+                            ,"default"=>0
+                            ,"description"=>""
+                            ,"decision"=>"Trés Bien"
+                            ,"bind"=>array("b1"=>"{LA:SubComp:#N2:Model:#BM:@Score}")
+                        )
                     )
                 ,'Score'=>"0"
                 ,'Poid'=>""

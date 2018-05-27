@@ -273,8 +273,8 @@ class CompEvaluation
             case "AutreInformations":
                 $key=str_replace("@","",$var[$i+1]);
                 $ChaineAcces.="->_AutreInformations->{$key}";
-               /// echo "\$this$ChaineAcces='$valeur'=;";
-                eval("\$this$ChaineAcces='$valeur';");
+                // echo "\$this$ChaineAcces=\"$valeur\";";
+                eval("\$this$ChaineAcces=\"$valeur\";");
                 $i+=1;
                 break;
             case "Model":
@@ -383,6 +383,12 @@ class CompEvaluation
                 eval("\$this$ChaineAcces;");
                 $i+=1;
                 break;
+
+            case "updateCondition":
+                $ChaineAcces.="->_UpdateCondition";
+                break;
+
+
             default :
                // echo  $ChaineAcces."<br>" ;
               //  echo $var[$i]."<br>";
@@ -454,6 +460,7 @@ class CompEvaluation
                         $next_request=$var[$i+1];
                         if($next_request[0]=="#"){
                             $next_request=str_replace("#","",$next_request);
+
                             $Pointeur=$Pointeur->_SubComp[$next_request];
 
                             $i++;
