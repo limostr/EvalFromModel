@@ -12,7 +12,7 @@ library\database\dbadapter::connect();
 
 $Comp=new \evalLib\CompEvaluation($LAModel);
 
- $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
 
  $DataBaseInit->initPrepare($_GET);
  $DataBaseInit->LoadData($Comp);
