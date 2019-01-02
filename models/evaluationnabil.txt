@@ -1,0 +1,25 @@
+
+Score =2×MoyenneGénérale + Malus Redoublement + Malus Contôle + Bonus bac + Bonus Crédits + Bonus Diplôme
+
+Avec :
+
+    Bonus Diplôme (1point licence, 2 points maitrise, 3 points ingénieur, 4 points doctorat)
+    La moyenne Générale est la moyenne pondérée des moyennes des années d'études suivantes :
+
+·         des trois années de licence (Moy L1+2*Moy L2+2*Moy L3-S1)/5.
+
+·         des quatre années de maîtrise (Moy A1+Moy A2+2*Moy A3+2*Moy A4-S1)/5
+
+·         des trois années d’ingénieries (Moy Ing1+2*Moy Ing2+2*Moy Ing3-S1)/5
+
+3.     Bonus année d’obtention du diplôme : 3 points (diplôme 2018), 2 points (diplôme 2017), 1 point (diplôme 2016)
+
+4.     Bonus expérience professionnelle : 3 points (plus de trois ans), 2 points (2 ans), 1 point (1an)
+
+5.     Malus redoublement = - 1point/redoublement.
+
+6.     Malus contrôle = - 05 point/ session contrôle.
+
+7.     Bonus bac : 0 point ( M passable), 1 points (M Assez bien), 2 points (M. Bien) et 3 points ((M. Très bien)
+
+8.     Bonus crédits (selon le total des crédits des trois années) = +0 (si total inférieur à 150), + 2 points (si total entre 151 et 170) et +4 (si total entre 171 et 180).

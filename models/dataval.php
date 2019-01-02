@@ -591,6 +591,199 @@ $N2 =array(
         )
 );
 
+$N3=array(
+    'Name'=>"N3"
+,'Label'=>"1 année"
+,"database"=>array(
+        'insert'=>array(
+            "s2"=>array(
+                'bind'=>array(
+                    "DATA"=>array(
+                        "records"=>array(
+                            "moyenne"=>"{Licence:SubComp:#N3:@Score}"
+                        ,"session"=>"{Licence:SubComp:#N3:AutreInformations:@session}"
+                        )
+                    )
+                )
+            ,'table'=>'detailsparcoursetud'
+            ,'updateCondition'=>array(
+                    "iddetailsparcoursetud"=>"{Licence:SubComp:#N3:AutreInformations:@id}"
+
+                )
+
+            ),
+        )
+
+    )
+,"Affiche"=>1
+,'Formule'=>array()
+,'Score'=>""
+,'Poid'=>""
+,'description'=>""
+,'decision'=>""
+,'SubComp'=>[]
+,'AutreInformations'=>array("session"=>"",'id'=>"","BC"=>"")
+,'form'=>array(
+        "{Licence:SubComp:#N3:@Score}"=>array(
+            "type"=>"number"
+        ,"options"=>array(
+                "other"=>array(
+                    "max"=>20
+                ,'min'=>0
+                ,"placeholder"=>"00.00"
+                ,"required"=>"required"
+                ,"step"=>"0.01"
+                ,"title"=>"Moyenne de l'année"
+                ,"pattern"=>"^\d{1,2}(?:\.\d{1,2})?$"
+                ,"onblur"=>"this.parentNode.parentNode.style.backgroundColor=/^\d{1,2}(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'"
+                )
+            )
+        ,"name"=>"{Licence:SubComp:#N3:@Score}"
+        ,"label"=>"Moyenne 1ére année: "
+        ),
+        "{Licence:SubComp:#N3:AutreInformations:@BC}"=>array(
+            "type"=>"number"
+        ,"options"=>array(
+                "other"=>array(
+                    "max"=>20
+                ,'min'=>0
+                ,"placeholder"=>"00"
+                ,"required"=>"required"
+                ,"step"=>"1"
+                ,"title"=>"Credit"
+                ,"pattern"=>"^\d{1,2}?$"
+                ,"onblur"=>"this.parentNode.parentNode.style.backgroundColor=/^\d{1,2}?$/.test(this.value)?'inherit':'red'"
+                )
+            )
+        ,"name"=>"{Licence:SubComp:#N3:@Score}"
+        ,"label"=>"Credit : "
+        )
+    ,"{Licence:SubComp:#N3:AutreInformations:@session}"=>array(
+            "type"=>"select"
+        ,"list"=>array(
+                "Principale" =>"Principale"
+            ,"Rattrapage"=>"Rattrapage"
+            )
+
+        ,"options"=>array(
+                "class"=>array("required","Form-Control")
+            ,"other"=>array()
+            )
+        ,"name"=>"{Licence:SubComp:#N3:AutreInformations:@session}"
+        ,"label"=>"Session: "
+        ),"{Licence:SubComp:#N3:AutreInformations:@id}"=>array(
+            "type"=>"hidden"
+        ,"options"=>array(
+                "other"=>array(
+                    "value"=>""
+                )
+            )
+        ,"name"=>"{Licence:SubComp:#N3:AutreInformations:@id}"
+        ,"label"=>"Id Detail parcours"
+        )
+
+    )
+,'Model'=>array(
+        "BS"=>array(
+            'Name'=>"BS"
+        ,'Label'=>"Bonus Session"
+        ,'Formule'=>array(
+                "F1"=>array(
+                    'type'=>'logique'
+                ,'nature'=>"if"
+                ,'toEval'=>" '{Licence:SubComp:#N3:AutreInformations:@session}'=='Principale'  "
+                ,"score"=>array("true"=>1,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>""
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#BS:@Score}")
+
+                )
+
+            )
+        ,'Score'=>"1"
+        ,'Poid'=>""
+        ,'description'=>""
+        ,'decision'=>""
+        ),
+        "BM"=>array(
+            'Name'=>"BM"
+        ,'Label'=>"Bonus Moyenne"
+        ,'Formule'=>array(
+                "F1"=> array(
+                    'type'=>'logique'
+                ,'nature'=>"if"
+                ,'toEval'=>"{Licence:SubComp:#N3:@Score}>=10 && {Licence:SubComp:#N3:@Score} <12"
+                ,"score"=>array("true"=>1,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>"Passable"
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#BM:@Score}")
+                ),
+                "F2"=> array(
+                    'type'=>'logique'
+                ,'nature'=>"else"
+                ,'toEval'=>"{Licence:SubComp:#N3:@Score}>=12 && {Licence:SubComp:#N3:@Score} <14"
+                ,"score"=>array("true"=>2,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>"Assez bien"
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#BM:@Score}")
+                ),
+                "F3"=> array(
+                    'type'=>'logique'
+                ,'nature'=>"else"
+                ,'toEval'=>"{Licence:SubComp:#N3:@Score}>=14 && {Licence:SubComp:#N3:@Score} <16"
+                ,"score"=>array("true"=>3,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>"Bien"
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#BM:@Score}")
+                ),
+                "F4"=> array(
+                    'type'=>'logique'
+                ,'nature'=>"else"
+                ,'toEval'=>"{Licence:SubComp:#N3:@Score}>=16"
+                ,"score"=>array("true"=>4,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>"Trés Bien"
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#BM:@Score}")
+                )
+
+            )
+        ,'Score'=>""
+        ,'Poid'=>""
+        ,'description'=>""
+        ,'decision'=>""
+        ),
+        "Moy"=>array(
+            'Name'=>"Moy"
+        ,'Label'=>"Moyenne"
+        ,'Formule'=>array(
+                "F1"=> array(
+                    'type'=>'arithmetique'
+                ,'nature'=>"arithmetique"
+                ,'toEval'=>"{Licence:SubComp:#N3:@Score}"
+                ,"score"=>array("true"=>1,"false"=>0)
+                ,"default"=>0
+                ,"description"=>""
+                ,"decision"=>"Passable"
+                ,"bind"=>array("b1"=>"{Licence:SubComp:#N3:Model:#Moy:@Score}")
+
+                )
+            )
+        ,'Score'=>""
+        ,'Poid'=>""
+        ,'description'=>""
+        ,'decision'=>""
+        )
+    )
+);
+
+
+
 $LA['SubComp']["N1"]=$N1;
 $LA['SubComp']["N2"]=$N2;
+$LA['SubComp']["N3"]=$N3;
 $LAModel =$LA;

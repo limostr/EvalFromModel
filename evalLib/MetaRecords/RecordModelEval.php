@@ -203,6 +203,22 @@ class RecordModelEval implements Record
         return $tree;
     }
     public function toJson() {}
+
+    public function toArray(){
+
+        $TableCompRecEval['Name']=$this->_Name;
+        $TableCompRecEval['Label']=$this->_Label;
+        foreach ($this->_Formule as $key_F => $Formule){
+            $TableCompRecEval['Formule'][$key_F]=$Formule->toArray();
+        }
+
+        $TableCompRecEval['Score']=$this->_Score;
+        $TableCompRecEval['Poid']=$this->_Poid;
+        $TableCompRecEval['description']=$this->_description;
+        $TableCompRecEval['decission']=$this->_decission;
+        return $TableCompRecEval;
+    }
+
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}
     public function HasAttribute($attribute){}

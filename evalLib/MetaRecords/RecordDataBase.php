@@ -99,4 +99,17 @@ class RecordDataBase implements Record
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}
     public function HasAttribute($attribute){}
+
+    public function toArray(){
+
+        $RecordDB['loader']=$this->_Record_Load->toArray();
+
+        foreach ($this->_Record_Insert as $key_Insert => $isertdata){
+            $RecordDB['insert'][$key_Insert]=$isertdata->toArray();
+        }
+
+        $RecordDB['init']=$this->_Init;
+        return $RecordDB;
+
+    }
 }

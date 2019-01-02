@@ -17,13 +17,13 @@ class CompEvaluation
     public $_RecordForm;
     public $_RecordDataBase;
     public $_SubComp=array();
-    public $_Formule;
+    public $_Formule=array();
     public $_Template;
     public $_form;
     public $_Parent=Null;
     public $_AutreInformations;
     public $_Model ;
-
+    public $_Trace;
 
     private  $_Original;
     public function __construct($structur,CompEvaluation $Parent=Null)
@@ -36,6 +36,20 @@ class CompEvaluation
         }else{
              throw  new \Exception("Erreur de construction d'objet à partir de ");
         }
+
+    }
+
+
+    public function initAutreInformation($dataJson){
+
+            $this->_AutreInformations= isset($dataJson['AutreInformations']) ? (object) $dataJson['AutreInformations'] : Null;
+            foreach ($this->_SubComp as $key => $node){
+				if(isset($dataJson['SubComp'][$key])){
+					$this->_SubComp[$key]->initAutreInformation($dataJson['SubComp'][$key]);
+				}
+                
+            }
+
 
     }
 
@@ -52,7 +66,65 @@ class CompEvaluation
         $this->_SubComp[$SubComp->_RecordEval->getName()] = $SubComp;
     }
 
+
+    public function toArray(){
+        $TableCompRecEval=[];
+        $TableCompRecEval['Name']=$this->_RecordEval->getName();
+        $TableCompRecEval['parameters']=$this->_RecordEval->getParameters();
+        $TableCompRecEval['database']=$this->_RecordEval->getParameters();
+        $TableCompRecEval['Label']=$this->_RecordEval->getLabel();
+        $TableCompRecEval['Affiche']=$this->_RecordEval->getAffiche();
+
+
+        foreach ($this->_Formule as $key => $val){
+            $TableCompRecEval['Formule'][$key]=$val->toArray();
+        }
+
+
+        // $TableCompRecEval['From'] =$this->_RecordEval->getFrom();
+        $TableCompRecEval['Score']=$this->_RecordEval->getScore();
+        $TableCompRecEval['Poid']=$this->_RecordEval->getPoid();
+
+        $TableCompRecEval['description']=$this->_RecordEval->getdescription();
+		if($this->_RecordDataBase){
+		$TableCompRecEval['database']=$this->_RecordDataBase->toArray();
+		}
+        
+
+        foreach ($this->_SubComp as $KeySubComp => $SComp){
+            $TableCompRecEval['SubComp'][$KeySubComp]=$SComp->toArray();
+        }
+
+        $TableCompRecEval['AutreInformations']=[];
+        $AutreAttrib= get_object_vars($this->_AutreInformations);
+        if(count($AutreAttrib)>0){
+
+            foreach ($AutreAttrib as $Key => $valAttrib){
+                        $TableCompRecEval['AutreInformations'][$Key]=$valAttrib;
+            }
+        }
+
+        foreach ($this->_form as $KM => $M){
+            $TableCompRecEval['form'][$KM]=$M->toArray();
+        }
+
+        foreach ($this->_Model as $KM => $M){
+            $TableCompRecEval['Model'][$KM]=$M->toArray();
+        }
+
+        if($this->_Template){
+            $TableCompRecEval['template']=$this->_Template->toArray();
+        }
+
+        return $TableCompRecEval;
+    }
+
+    /**
+     * Construct table forom evaluation model
+     */
     public function toJson() {
+
+
 
     }
 
@@ -81,7 +153,9 @@ class CompEvaluation
         $tree["iconclass"]="fa fa-file";
 
         if(is_array($this->_Formule)){
+            $Node=[];
             foreach ($this->_Formule  as $key => $f){
+
                 $Node["key"]= "_Formule_";
                 $Node["title"]= "Formule";
                 $Node["tooltip"]= "Formule";
@@ -89,13 +163,18 @@ class CompEvaluation
                 $Node["iconclass"]="fa fa-file";
 
                 $Node['children'][]=$f->ToNode();
+
+            }
+            if(count($Node)>0){
                 $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
         }
 
         if(is_array($this->_Model)){
+            $Node=[];
             foreach ($this->_Model  as $key => $f){
+
                 $Node["key"]= "_Model_";
                 $Node["title"]= "Model";
                 $Node["tooltip"]= "Model";
@@ -103,13 +182,18 @@ class CompEvaluation
                 $Node["iconclass"]="fa fa-file";
 
                 $Node['children'][]=$f->ToNode();
+
+            }
+            if(count($Node)>0){
                 $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
         }
 
         if(is_array($this->_form)){
+            $Node=[];
             foreach ($this->_form  as $key => $f){
+
                 $Node["key"]= "_Form_";
                 $Node["title"]= "Formulaire";
                 $Node["tooltip"]= "Formulaire";
@@ -117,14 +201,32 @@ class CompEvaluation
                 $Node["iconclass"]="fa fa-file";
 
                 $Node['children'][]=$f->ToNode();
+
+            }
+            if(count($Node)>0){
                 $tree['children'][]=$Node;
                 $tree["folder"]="true";
             }
-        }
 
-        foreach ($this->_SubComp as $key => $node){
-            $tree['children'][]=$node->ToNode();
-            $tree["folder"]="true";
+        }
+        if(count($this->_SubComp)>0){
+
+            $CompTree["key"]= "_SUBCOMP_";
+            $CompTree["title"]= "Sous Composante";
+            $CompTree["tooltip"]= "\"Sous Composante";
+            $CompTree["folder"]= "true";
+            $CompTree["iconclass"]="fa fa-file";
+
+
+            foreach ($this->_SubComp as $key => $node){
+                $CompTree['children'][]=$node->ToNode();
+                $CompTree["folder"]="true";
+            }
+
+            if(count($CompTree)>0){
+                $tree['children'][]=$CompTree;
+                $tree["folder"]="true";
+            }
         }
         return $tree;
 
@@ -196,9 +298,12 @@ class CompEvaluation
                 $this->_Model[$keyForm]=$RecordModelEval;
             }
         }
+		
 
-        if(isset($JsonDecode['database'])){
+        if(isset($JsonDecode['database']) ){
+			//print_r($JsonDecode['database']);die();
             $this->_RecordDataBase=new \evalLib\MetaRecords\RecordDataBase();
+			
             $this->_RecordDataBase->Init($JsonDecode['database']);
         }
 
@@ -265,16 +370,27 @@ class CompEvaluation
                     $key=str_replace("#","",$var[$i+1]);
 
                     $ChaineAcces.="->AddPrepareInit('$key',$valeur)";
+                    if(!empty($valeur)){
+                        eval("\$this$ChaineAcces;");
+                    }
 
-                    eval("\$this$ChaineAcces;");
                 }
                 $i+=1;
                 break;
             case "AutreInformations":
                 $key=str_replace("@","",$var[$i+1]);
                 $ChaineAcces.="->_AutreInformations->{$key}";
-                // echo "\$this$ChaineAcces=\"$valeur\";";
-                eval("\$this$ChaineAcces=\"$valeur\";");
+
+                if(!empty($valeur)){
+                    //echo "<br>\$this$ChaineAcces=\"$valeur\";";
+					//$valeur=empty($valeur) ? $valeur :  "0";
+                    eval("\$this$ChaineAcces=\"$valeur\";");
+                }else{
+				
+					$valeur="0";
+                    eval("\$this$ChaineAcces=\"$valeur\";");
+				}
+
                 $i+=1;
                 break;
             case "Model":
@@ -472,7 +588,7 @@ class CompEvaluation
                     break;
                     case "AutreInformations":
                         $key=str_replace("@","",$var[$i+1]);
-                      //  echo "<b style='color:darkred'>$key</b>";
+                       //  echo "<b style='color:darkred'>$key</b><br>";
                         if(isset($Pointeur->_AutreInformations->{"$key"})){
                             $valeurFinal=$Pointeur=$Pointeur->_AutreInformations->{"$key"};
                         }
@@ -505,7 +621,10 @@ class CompEvaluation
                             if(is_array($Pointeur)){
                                 foreach ($Pointeur as $key => $Pval){
                                     if(is_object($Pointeur[$key]  )){
-                                        $NPointeur[]=$Pointeur[$key]->_Model[$next_request];
+                                        if(isset($Pointeur[$key]->_Model[$next_request])){
+                                            $NPointeur[]=$Pointeur[$key]->_Model[$next_request];
+                                        }
+
                                     }
                                 }
                             }else{
@@ -602,7 +721,7 @@ class CompEvaluation
     public function InitValues($values){
         if(is_array($values)){
             foreach ($values as $key => $value){
-               // echo "$key => $value <br>";
+                //echo "<br>- ".$key.": $value<br>";
                 $this->setIn($key,$value);
             }
         }else{

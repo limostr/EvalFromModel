@@ -11,10 +11,11 @@
 
 namespace evalLib\MetaRecords\RecordDB;
 use evalLib\MetaRecords\Record;
+use function PHPSTORM_META\elementType;
 
 class RecordLoader implements Record
 {
-    public  $_Requests;
+    public  $_Requests=[];
     private $_Table;
     private $_PKey;
     private $_ValuesLoaded;
@@ -34,6 +35,7 @@ class RecordLoader implements Record
                 $LoderRecord = new \evalLib\MetaRecords\RecordDB\RecordSql();
                 $LoderRecord->setSql(isset($sql['sqlstring']) ? $sql['sqlstring'] : "");
                 $LoderRecord->setPrepare(isset($sql['prepare']) ? $sql['prepare'] : "");
+                $LoderRecord->setPrepareInit(isset($sql['prepareInit']) ? $sql['prepareInit'] : "");
                 $LoderRecord->setBind(isset($sql['bind']) ? $sql['bind'] : "");
 
                 $SelectorType=new \evalLib\MetaRecords\RecordDB\RecordSelector();
@@ -115,7 +117,30 @@ class RecordLoader implements Record
     {
         $this->_ValuesLoaded = $ValuesLoaded;
     }
+    public function toArray(){
+        $Record_Load['table']=$this->_Table;
+        $Record_Load['pkey']=$this->_PKey;
+        foreach ($this->_Requests as $key => $datas){
+            $Record_Load['sql'][$key]['sqlstring']=$datas->getSql();
 
+            $Record_Load['sql'][$key]['prepare']=$datas->getPrepare();
+            $Record_Load['sql'][$key]['bind']=$datas->getBind();
+
+
+            if($datas->_SelectorType){
+                $Record_Load['sql'][$key]['SelectorType']=$datas->_SelectorType->toArray();
+            }else{
+                $Record["Multiple"]=0;
+                $Record["chose"]=[];
+                $Record["bind"]=[];
+                $Record["template"]=[];
+                $Record_Load['sql'][$key]['SelectorType']=$Record;
+            }
+
+        }
+
+        return $Record_Load;
+    }
     public function toJson() {}
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}

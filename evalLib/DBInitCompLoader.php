@@ -27,8 +27,10 @@ class DBInitCompLoader
         $params=count($data)>0 ? $this->CompEval->_RecordEval->getParameters() : array();
 
         foreach ($data as $param => $value){
+            if(isset($params[$param])){
+                $this->CompEval->setIn($params[$param],$value);
+            }
 
-            $this->CompEval->setIn($params[$param],$value);
         }
     }
     public function constructDataInSub($Comp,$Data){
@@ -47,16 +49,17 @@ class DBInitCompLoader
         foreach ($Inserts as $key =>$InsertObj){
 
             $Insert=$InsertObj->getBind();
-
+         // print_r($Insert);
             if(isset($Insert['DATA'])){
 
                 $dataToInsert=[];
                 foreach ($Insert['DATA'] as $typekey => $binddata){
                     if($typekey=="records"){
-                        echo "<pre style='color:red'>";print_r($binddata);echo "</pre>";
+                     //    echo "<pre style='color:red'>";print_r($binddata);echo "</pre>";
                         $dataTemp=[];
 
                         foreach ($binddata as $RecName => $AttribLooK){
+                           // echo $AttribLooK."............<br>";
                             $value=$this->CompEval->lookForVariable($AttribLooK);
                             $dataTemp[$RecName]=$value;
                         }
@@ -78,17 +81,24 @@ class DBInitCompLoader
                     }
 
                 }
-                echo "<pre style='color:#1c7430'>";print_r($dataToInsert);echo "</pre>";
-                echo "<pre style='color:#0b2e13;'>";print_r($ArrayUpdateData);echo "</pre>";
+
+               // echo "<pre style='color:#0b2e13;'>Update constrant : ";print_r($ArrayUpdateData);echo "</pre>";
+             //   echo "<pre style='color:#1c7430'>Inset data : ";print_r($dataToInsert);echo "</pre>";
                 if(count($dataToInsert)>0){
                     if(count($ArrayUpdateData)>=1){
                         \library\database\dbadapter::Update($InsertObj->getTable(),$dataToInsert,$ArrayUpdateData);
                     }else{
-                        \library\database\dbadapter::Insert($InsertObj->getTable(),$dataToInsert);
+                         \library\database\dbadapter::Insert($InsertObj->getTable(),$dataToInsert);
+                        $id = \library\database\dbadapter::$dbh->lastInsertId();
+                        if(isset($Insert['GET'])){
+                            foreach ($Insert["GET"] as $key => $value){
+                                $this->CompEval->setIn($key,$id);
+                            }
+                        }
+
+
                     }
                 }
-
-
 
             }
 
@@ -153,14 +163,14 @@ class DBInitCompLoader
                }
 
                 $PreapareInit=$Sql->getPrepareInit();
-
-                if(count($PreapareInit)>0){
+            //    echo"<pre style='color:red'>";print_r($this->CompEval->getAutreInformations());echo"</pre>";
+                if(is_array($PreapareInit) && count($PreapareInit)>0){
 
                     foreach ($PreapareInit as $Attrib => $NameInLoad){
                         if($NameInLoad[0]=="{"){
                             $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
                             $listSelect.=!empty($listSelect) ? " AND $Attrib=:$Attrib " : "$Attrib=:$Attrib";
-                        }else{
+                        }elseif(!empty($NameInLoad)){
                             $listSelect.=!empty($listSelect) ? " AND $Attrib=:$Attrib " : "$Attrib=:$Attrib";
                             $Array[$Attrib]=$NameInLoad;
                         }
@@ -171,7 +181,6 @@ class DBInitCompLoader
 
                 $Binds= $Sql->getBind();
                 // print_r($record);
-
                 if(count($record)==1){
                     $record=$record[0];
                 }
@@ -180,8 +189,15 @@ class DBInitCompLoader
                     if($keyType == "SET"){
                         foreach ($varArray as $keybind => $varname) {
                                 if (isset($record[$keybind])) {
-                                    //echo $varname . "=>$keybind:" . $record[$keybind]."<br>";
-                                    $this->CompEval->setIn($varname, $record[$keybind]);
+                                   // echo $varname . "=>$keybind:" . $record[$keybind]."<br>";
+                                    if(!empty($record[$keybind])){
+                                        $varkey = explode(";",$varname);
+                                        foreach ($varkey as $varnamekey){
+                                            $this->CompEval->setIn($varnamekey, $record[$keybind]);
+                                        }
+
+                                    }
+
                                  }
                             }
                     }elseif($keyType == "GET"){
@@ -193,7 +209,10 @@ class DBInitCompLoader
                                     if (isset($rec[$varname])) {
                                         $keyt=str_ireplace("?",$i,$keytemplate);
                                         //echo $keyt."<br>";
-                                        $this->CompEval->setIn($keyt, $rec[$varname]);
+                                        if(!empty($rec[$varname])){
+                                            $this->CompEval->setIn($keyt, $rec[$varname]);
+                                        }
+
                                     }
                                 }
                                 $i+=1;
@@ -201,14 +220,17 @@ class DBInitCompLoader
                         }else{
                             foreach ($varArray as $keybind => $varname) {
                                 if (isset($record[$varname])) {
-                                     $this->CompEval->setIn($keybind, $record[$varname]);
+                                    if(!empty($record[$varname])){
+                                        $this->CompEval->setIn($keybind, $record[$varname]);
+                                    }
+
                                 }
                             }
                         }
                     }
                 }
             }
-
+           // echo"<pre style='color:blue'>";print_r($this->CompEval->getAutreInformations());echo"</pre>";
             foreach ($CompEval as $key => $CompToEval){
 
                 if(isset($CompToEval->_SubComp) && ($CompToEval->_SubComp) && count($CompToEval->_SubComp)) {
@@ -218,6 +240,7 @@ class DBInitCompLoader
 
             }
         }
+        return false;
     }
 
     public function RedirectForChose(RecordSql $Sql,&$html=""){
@@ -231,25 +254,33 @@ class DBInitCompLoader
                 $ArrayPrepare= $Sql->getPrepare();
                 $Array=[];
                 foreach ($ArrayPrepare as $Attrib => $NameInLoad){
-                    if($NameInLoad[0]=="{"){
+                    if(isset($NameInLoad[0]) && $NameInLoad[0]=="{" ){
                         $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
-                    }else{
+                    }elseif(!empty($NameInLoad)){
                         $Array[$Attrib]=$NameInLoad;
                     }
                 }
 
                 $PreapareInit=$Sql->getPrepareInit();
                 $listSelect="";
+
                 if(count($PreapareInit)>0){
 
                     foreach ($PreapareInit as $Attrib => $NameInLoad){
-                        if($NameInLoad[0]=="{"){
-                            $Array[$Attrib]=$this->CompEval->lookForVariable($NameInLoad);
+                        if($NameInLoad[0]=="{" ){
+                            $tmp=$this->CompEval->lookForVariable($NameInLoad);
+                            if(!empty($tmp)){
+                                $Array[$Attrib]=$tmp;
+                                $listSelect.=!empty($listSelect) ? " AND $Attrib=:$Attrib " : "$Attrib=:$Attrib";
+                            }
+                           // echo "$Attrib=$tmp;$listSelect<br>";
+                        }elseif(!empty($NameInLoad)){
+
                             $listSelect.=!empty($listSelect) ? " AND $Attrib=:$Attrib " : "$Attrib=:$Attrib";
-                        }else{
-                            $listSelect.=!empty($listSelect) ? " AND $Attrib=:$Attrib " : "$Attrib=:$Attrib";
-                            $Array[$Attrib]=$NameInLoad;
+                            $Array["$Attrib"]=$NameInLoad;
+
                         }
+
                     }
                 }
 
@@ -272,19 +303,19 @@ class DBInitCompLoader
                     }
                 }
                 //print_r($sqlString);
-                /* echo "<pre style='color:red'>";
-                echo $sqlString."<br>";
+              //   echo "<pre style='color:green'>";
+               /* echo $sqlString."<br>";
                 print_r($listSelect);
                 print_r($PreapareInit);*/
 
 
                 $record=\library\database\dbadapter::SelectWithPrepare($sqlString,$Array,$listSelect);
 
-               // print_r($record);
-               // echo "</pre>";
+              //   print_r($record);
+             // echo "</pre>";
 
 
-                $has=count($record)>1 ? true : false;
+                $has=count($record) >1 ? true : false;
                 if($has){
                     $bind = $Sql->_SelectorType->getBind();
                     $template = $Sql->_SelectorType->getTemplate();
@@ -303,11 +334,29 @@ class DBInitCompLoader
                         if($replace){
                             $html.=$htmlTemp;
                         }
+
                     }
 
+                }elseif(count($record)==1){
+                    $bind = $Sql->_SelectorType->getBind();
+                    $template = $Sql->_SelectorType->getTemplate();
+                    $html = $template['message'];
+                    $templateHtml =$template['template'];
+                    foreach ($record as $r){
+                        $htmlTemp=$templateHtml;
+                        $replace = false;
+                        foreach ($bind as $keyattrib => $templatelabel){
+                            if(isset($r[$keyattrib])){
+                                $replace=true;
+                                $htmlTemp=str_ireplace($templatelabel,$r[$keyattrib],$htmlTemp);
+                            }
+                        }
+
+                        if($replace){
+                            $html.=$htmlTemp;
+                        }
+                    }
                 }
-
-
             }
 
         }

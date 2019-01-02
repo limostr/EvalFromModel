@@ -99,6 +99,16 @@ class RecordSelector implements Record
     {
         $this->_Chose = $Chose;
     }
+
+    public function toArray(){
+
+        $Record["Multiple"]=$this->_Multiple;
+        $Record["chose"]=$this->_Chose;
+        $Record["bind"]=$this->_Bind;
+        $Record["template"]=$this->_Template;
+
+        return $Record;
+    }
     public function toJson() {}
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}

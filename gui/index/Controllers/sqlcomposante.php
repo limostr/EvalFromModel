@@ -11,14 +11,14 @@ namespace gui\index\Controllers;
 use library\mvc\Controller;
 use library\mvc\View;
 
-class index extends Controller
+class sqlcomposante extends Controller
 {
 
 
     public function index()
     {
         $Vue = new View();
-        $Vue->titre = "Application de GUI";
+        $Vue->titre = "Sql Composante";
 
         $Vue->generate();
     }

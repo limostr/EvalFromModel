@@ -19,7 +19,7 @@ use library\Readers\Configuration;
 
                  //print_r(configuration::$_config);
                  //echo 'mysql:host='.configuration::$_config['host'].';dbname='.configuration::$_config['dbname'];
-                self::$dbh = new \PDO('mysql:host='.configuration::$_config['host'].';dbname='.configuration::$_config['dbname'], configuration::$_config['user'] , configuration::$_config['password']);
+                self::$dbh = new \PDO('mysql:host='.configuration::$_config['host'].':'.configuration::$_config['port'].';dbname='.configuration::$_config['dbname'], configuration::$_config['user'] , configuration::$_config['password']);
                 self::$dbh->exec('SET NAMES utf8');
             } catch (PDOException $e) {
                 print "Erreur !: " . $e->getMessage() . "<br/>";
@@ -75,9 +75,9 @@ use library\Readers\Configuration;
             $stmt->execute();
 
             $req=$stmt->fetchAll();
-           //  echo $Sql." <br>";
-           // print_r($dataPrepare);
-
+            /*      echo $Sql." <br>";
+          /*      print_r($dataPrepare);
+     echo "----------<br>";*/
            //  print_r($req);
             return $req;
         } catch (PDOException $e) {
@@ -90,14 +90,12 @@ use library\Readers\Configuration;
         try {
             $data=false;
 
-
-
              $req=self::$dbh->query($Sql);
-        if($req){
-            foreach($req as $row) {
-                $data[]=$row;
+            if($req){
+                foreach($req as $row) {
+                    $data[]=$row;
+                }
             }
-        }
 
             return $data;
         } catch (PDOException $e) {
@@ -132,6 +130,8 @@ use library\Readers\Configuration;
             }else{
                 return array();
             }
+        }elseif(is_array($record)) {
+            return $record;
         }else{
             return array();
         }
@@ -144,6 +144,7 @@ use library\Readers\Configuration;
             $Attributs=self::AttributeExtractor($record);
             $datatoInsert=$valueParam="";
 
+             echo "<pre style='color:#1c7430'>Inset data Record : ";print_r($record);echo "</pre>";
 
             foreach ($Attributs as $Attrib=>$ValueAttrib){
                 $datatoInsert.=empty($datatoInsert) ? $Attrib : ",$Attrib";
@@ -151,13 +152,15 @@ use library\Readers\Configuration;
             }
 
             $stmt = self::$dbh->prepare("INSERT INTO $table ($datatoInsert) VALUES ($valueParam)");
-           //  echo "INSERT INTO $table ($datatoInsert) VALUES ($valueParam)";
+             echo "INSERT INTO $table ($datatoInsert) VALUES ($valueParam)";
 
             foreach ($Attributs as $Attribi=>$ValueAttribi){
                 $stmt->bindValue( ":$Attribi" , $ValueAttribi);
+                echo "<pre style='color:#1c7430'>$Attribi : $ValueAttribi </pre>";
             }
 
              $res= $stmt->execute();
+          //  echo $res."--------------><br>";
              return $res;
         } catch (PDOException $e) {
             throw new Exception("Erreur ! prepare data to insert $table : " . $e->getMessage());
@@ -228,7 +231,7 @@ use library\Readers\Configuration;
             }
 
             $stmt=self::$dbh->prepare("UPDATE $table SET $valueParam WHERE $WhereParam");
-print_r($Attributs);
+//print_r($Attributs);
             foreach ($Attributs as $Attrib=>$ValueAttrib){
 
                 $stmt->bindValue( ":$Attrib" , $ValueAttrib);

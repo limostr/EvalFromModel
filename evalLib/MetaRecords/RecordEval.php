@@ -247,5 +247,6 @@ class RecordEval implements Record
     }
     public function FromArray($JsonString){}
     public function HasAttribute($attribute){}
+    public function toArray(){}
 
 }

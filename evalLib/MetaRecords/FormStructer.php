@@ -161,7 +161,7 @@ class FormStructer
     public function __toString(){
         $class=$this->getClass();
         $other=$this->getOther();
-        return "<form  action=\"".$this->getAction()."\" method=\"".$this->getMethod()."\" name=\"".$this->getName()."\" $class $other>";
+        return "<form  action=\"".$this->getAction()."\" method=\"".$this->getMethod()."\" name=\"".$this->getName()."\" id=\"".$this->getId()."\" $class $other>";
 
     }
 

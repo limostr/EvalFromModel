@@ -1,8 +1,10 @@
 
 <?php
 
+defined('BASE_PATH')
+|| define('BASE_PATH', realpath(dirname(__FILE__)));
 
-include "Autoloader.php";
+include dirname(__FILE__)."/Autoloader.php";
 Autoloader::register();
 
 

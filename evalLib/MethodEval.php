@@ -12,6 +12,42 @@ namespace evalLib;
 Abstract class MethodEval
 {
 
+    public static function ExPro($iduser){
+
+
+        $sqlString="
+          SELECT * FROM cvparcourspro 
+          INNER JOIN candidatcv ON cvparcourspro.idcandidatcv = candidatcv.idcandidatcv
+        WHERE candidatcv.idcandidat = $iduser
+";
+         $experience= \library\database\dbadapter::SelectSQL($sqlString);
+            $res=0;
+
+
+            foreach ($experience as $val){
+
+                 $nbranne=0;
+
+                if(!empty($val['datedesuspension']) && trim($val['datedesuspension'])!="-"){
+                    $datedebut = explode("-",$val['daterecrutement']);
+                    $datedefin = explode("-",$val['datedesuspension']);
+
+                    $nbranne=$datedefin[0]-$datedebut[0];
+                }else{
+                    $datedebut = explode("-",$val['daterecrutement']);
+                    $nbranne=date("Y")-$datedebut[0];
+
+                }
+                $nbranne= ($nbranne==0) ? 1   : $nbranne;
+
+                $res+=$nbranne;
+
+
+            }
+            return $res;
+
+    }
+
     public static function SUM(){
         $parameters = func_get_args();
         $number_of_arguments = func_num_args();

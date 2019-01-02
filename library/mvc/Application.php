@@ -50,6 +50,7 @@ class  Application
                     $hasrole=false;
                     if(isset($_Routes[$activity]['Roles']) && count($_Routes[$activity]['Roles'])>0){
                         @ session_start();
+
                         foreach($_Routes[$activity]['Roles'] as $role){
                             if($_SESSION['ROLE']==$role){
                                 $hasrole=true;

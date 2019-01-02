@@ -138,7 +138,20 @@ class RecordSql implements Record
         unset($this->_PrepareInit["$attrib"]);
     }
 
+    public function toArray(){
+        $Record_Load['sqlstring']=$this->_Sql;
 
+        $Record_Load['prepare']=$this->_Prepare;
+        $Record_Load['bind']=$this->_Bind;
+
+        $Record_Load['SelectorType']=$this->_SelectorType->toArray();
+        $Record_Load['prepareInit']=$this->_PrepareInit;
+        $Record_Load['recordset']=$this->_RecordSet;
+
+
+        return $Record_Load;
+
+    }
     public function toJson() {}
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}

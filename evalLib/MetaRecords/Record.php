@@ -15,4 +15,5 @@ interface Record
     public function FromJsonString(string $JsonString);
     public function FromArray($JsonString);
     public function HasAttribute($attribute);
+    public function toArray();
 }

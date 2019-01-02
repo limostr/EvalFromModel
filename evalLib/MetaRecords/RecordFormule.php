@@ -213,7 +213,25 @@ class RecordFormule implements Record
 
     }
 
-    public function toJson() {}
+    public function toJson() {
+
+
+
+    }
+
+    public function toArray(){
+        $TableCompRecEval['Name']=$this->_Name;
+        $TableCompRecEval['type']=$this->_type;
+        $TableCompRecEval['nature']=$this->_Nature;
+        $TableCompRecEval['toEval']=$this->_toEval;
+        $TableCompRecEval['score']=$this->_score;
+        $TableCompRecEval['default']=$this->_default;
+        $TableCompRecEval['description']=$this->_description;
+        $TableCompRecEval['decision']=$this->_decision;
+        $TableCompRecEval['bind']=$this->_bind;
+
+        return $TableCompRecEval;
+    }
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}
 

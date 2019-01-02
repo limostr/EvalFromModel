@@ -53,7 +53,7 @@ class FormEvaluation{
 
         if($EvalCom){
             foreach ($EvalCom as $key => $CompToEval){
-                if($CompToEval->_RecordEval->getAffiche()){
+                if(isset($CompToEval->_RecordEval) && $CompToEval->_RecordEval->getAffiche()){
                     $this->form.="<section>
                         <h3>".$CompToEval->_RecordEval->getLabel()."</h3>
                         <article>
@@ -100,6 +100,12 @@ class FormEvaluation{
                             <legend>".$formElts->_RecordEval->getLabel()."</legend>";
             foreach ($formElts->_form as $key => $elt){
                 $_InitValue=$this->_CompEval->lookForVariable($key);
+                if(empty($_InitValue)){
+                    $other=$elt->getOther();
+                    if(isset($other["value"])){
+                        $_InitValue=$other["value"];
+                    }
+                }
                 switch ($elt->getType()){
                     case 'select':
                         $this->form.=$this->setSelect($elt,$_InitValue);
@@ -139,7 +145,7 @@ class FormEvaluation{
             $select.="<option value=\"$key\" $selected>$val</option>";
         }
 
-        $select.="</select>";
+        $select.="</select><br>";
         return $select;
     }
 
@@ -148,7 +154,7 @@ class FormEvaluation{
         $other=$this->DetectOtherAttrib($elt->getOther());
 
         $select="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
-        $select .="<input type=\"text\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+        $select .="<input type=\"text\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other><br>";
         return $select;
     }
 
@@ -156,7 +162,7 @@ class FormEvaluation{
         $class=$this->DetectClass($elt->getClass());
         $other=$this->DetectOtherAttrib($elt->getOther());
 
-         $select ="<input type=\"hidden\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+         $select ="<input type=\"hidden\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other><br>";
         return $select;
     }
     public function setOtherInput(RecordForm $elt,$_InitValue){
@@ -165,7 +171,7 @@ class FormEvaluation{
         $other=$this->DetectOtherAttrib($elt->getOther());
         $input="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
 
-        $input .="<input type=\"".$elt->getType()."\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other>";
+        $input .="<input type=\"".$elt->getType()."\" value=\"$_InitValue\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $class $other><br>";
         return $input;
     }
 
@@ -174,14 +180,14 @@ class FormEvaluation{
         $other=$this->DetectOtherAttrib($elt->getOther());
         $input="<label for=\"".$elt->getName()."\">".$elt->getLabel()."</label>";
 
-        $input .="<textarea type=\"text\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $other $class>$_InitValue</textarea>";
+        $input .="<textarea type=\"text\" name=\"".$elt->getName()."\" id=\"".$elt->getId()."\" $other $class>$_InitValue</textarea><br>";
         return $input;
     }
 
     public function setSubmit($name,$id,$label ){
 
         $this->_Has_Submit=true;
-        return "<input type=\"submit\" value=\"$label\" name=\"$name\" id=\"$id\" >";
+        return "<input type=\"submit\" value=\"$label\" name=\"$name\" id=\"$id\" ><br>";
     }
 
     private function DetectClass($options){

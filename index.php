@@ -1,23 +1,30 @@
 
 <?php
+defined('BASE_PATH')  || define('BASE_PATH', realpath(dirname(__FILE__)));
 
 include "Autoloader.php";
 Autoloader::register();
 
 include "models/dataval.php";
 include "models/UEtoEval.php";
+include "evalmodel/mpwin/commission/eval.php";
+include "evalmodel/calculemoy/eval.php";
 
-library\Readers\Configuration::config();
-library\database\dbadapter::connect();
 
-$Comp=new \evalLib\CompEvaluation($LAModel);
 
-$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+ library\Readers\Configuration::config();
+ library\database\dbadapter::connect();
 
- $DataBaseInit->initPrepare($_GET);
- $DataBaseInit->LoadData($Comp);
+$Comp=new \evalLib\CompEvaluation($_Model_Eval['ReleverS1']);
+
+//$DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+
+ //$DataBaseInit->initPrepare($_GET);
+ //$DataBaseInit->LoadData($Comp);
+ 
+ 
 //print_r($Comp);
-$formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
+ //$formstructur=new \evalLib\MetaRecords\FormStructer("aa","bb");
 
 ?>
 
@@ -30,7 +37,7 @@ if(count($_POST)<=0){
 }else{
    // print_r($_POST);
     $Comp->InitValues($_POST);
-  ///  print_r($Comp);
+    echo "<pre>";  print_r($Comp);echo "</pre>";
     ///
     ///
 
@@ -38,13 +45,18 @@ if(count($_POST)<=0){
     $Evaluateur=new \evalLib\Evaluateur($Comp);
     $Evaluateur->Evaluation();
 
-    $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
+   // $DataBaseInit=new \evalLib\DBInitCompLoader($Comp);
 
-    $DataBaseInit->InsertInDB($Comp);
+   // $DataBaseInit->InsertInDB($Comp);
 
     $Vue=new \evalLib\ViewGen($Comp);
     $Vue->_InitValue();
-   echo $Vue->genVue(file_get_contents(dirname(__FILE__)."/view/relever.phtml"));
+  
+   $EvalDataLigne = $Vue->genLigneArray();
+    echo "<pre>";  print_r($EvalDataLigne);echo "</pre>";
+	
+	 echo $Vue->genVue(file_get_contents(dirname(__FILE__)."/view/relever1.phtml"));
+	 
 
 }
 /*$Comp=new \evalLib\CompEvaluation($ue);

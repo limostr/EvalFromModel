@@ -9,11 +9,19 @@
 namespace evalLib\MetaRecords;
 
 
-class RecordTemplate
+class RecordTemplate implements Record
 {
     private $_ligne;
     private $_liste;
 
+    public function toJson() {}
+    public function FromJsonString(string $JsonString){}
+    public function FromArray($JsonString){}
+    public function HasAttribute($attribute){}
+    public function toArray(){
+
+
+    }
 
     public function setIn($key,$nature,$value){
         switch ($nature){
@@ -34,6 +42,8 @@ class RecordTemplate
                 $Template->setType(isset($elt['Type']) ? $elt['Type'] : "");
                 $Template->setMallocForm(isset($elt['Malloc']) ? $elt['Malloc'] : "");
                 $Template->setValue(isset($elt['Value']) ? $elt['Value'] : "");
+                $Template->setLabel(isset($elt['Label']) ? $elt['Label'] : "");
+                $Template->setOrdre(isset($elt['ordre']) ? $elt['ordre'] : "");
                 $this->_liste[$key]=$Template;
             }
 
@@ -45,6 +55,8 @@ class RecordTemplate
                 $Template->setType(isset($elt['Type']) ? $elt['Type'] : "");
                 $Template->setMallocForm(isset($elt['Malloc']) ? $elt['Malloc'] : "");
                 $Template->setValue(isset($elt['Value']) ? $elt['Value'] : "");
+                $Template->setLabel(isset($elt['Label']) ? $elt['Label'] : "");
+                $Template->setOrdre(isset($elt['ordre']) ? $elt['ordre'] : "");
                 $this->_ligne[$key]=$Template;
             }
 

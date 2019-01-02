@@ -35,11 +35,10 @@ class Evaluateur
         ,"All"=>"([A-Z]{3,})(\(\{@[a-zA-A0-9:_]{2,}\}\))"
         );
 
+
     public function __construct(CompEvaluation $CompEval=null)
     {
-
         $this->CompEval=$CompEval;
-
     }
 
     public function Evaluation(CompEvaluation &$PComp=Null){
@@ -75,14 +74,12 @@ class Evaluateur
         if(isset($PComp->_Formule)){
             $res=0;
             foreach ($PComp->_Formule as $KeyFormule => $Formule){
-
                 if ($Formule->getNature()=="else" && !$res){
                     $res=$this->detectFunction($Formule);
                 }elseif ($Formule->getNature()!="else"){
                     $res=$this->detectFunction($Formule);
                 }
              }
-
         }
         //print_r($res);
     }
@@ -92,35 +89,45 @@ class Evaluateur
         //$_Has_Variable=preg_match($this->_Model_Exp_Reg['variable'],$formule->getToEval(),$matches);
 
         $formuleEvaluated=$formule->getToEval();
-            while (preg_match($this->_Model_Exp_Reg['variable'],$formuleEvaluated,$matches)){
-                 if(isset($matches[0]) && !empty($matches[0])){
-                    $UID=str_ireplace(array("}","{"),"",$matches[0]);
-                    $var=$this->CompEval->lookForVariable($UID);
-                    if(is_array($var)){
-                        $var = implode(",",$var);
-                    }
-                     $formuleEvaluated=str_ireplace($matches[0],"$var",$formuleEvaluated);
-                 }
+        //echo "<pre style='color: darkgoldenrod;'>";print_r($formule);echo"</pre>";
+        while (preg_match($this->_Model_Exp_Reg['variable'],$formuleEvaluated,$matches)){
+             if(isset($matches[0]) && !empty($matches[0])){
+                $UID=str_ireplace(array("}","{"),"",$matches[0]);
+               // echo "$UID<br>";
+                $var=$this->CompEval->lookForVariable($UID);
 
+
+                if(is_array($var)){
+                    $var = implode(",",$var);
+                }
+                 $formuleEvaluated=str_ireplace($matches[0],"$var",$formuleEvaluated);
              }
 
-        echo "<pre style='color: darkgoldenrod;'>";print_r($formuleEvaluated);echo"</pre>";
+         }
 
-       $res = $this->evalfunction($formuleEvaluated,$formule);
+        $res = $this->evalfunction($formuleEvaluated,$formule);
+        //trace de programme
+        $this->CompEval->_Trace[]=array(
+            "Formule"=>$formuleEvaluated
+            ,"Evaluation"=>$res
+        );
+        $formuleBind=$formule->getBind();
+        foreach($formuleBind as $key => $val){
+            $UID=str_ireplace(array("}","{"),"",$val);
+            $this->CompEval->setIn($UID,$res);
 
-       $formuleBind=$formule->getBind();
-       foreach($formuleBind as $key => $val){
-           $UID=str_ireplace(array("}","{"),"",$val);
-           $this->CompEval->setIn($UID,$res);
-       }
+            //trace de programme
+            $this->CompEval->_Trace[]=array(
+                "SET"=>$UID
+               ,"Evaluation"=>$res
+            );
+        }
 
-        echo "<pre style='color: red;font-size: large;'>$res</pre>";
+       // echo "<pre style='color: red;font-size: large;'>$res</pre>";
 
 
         return $res;
     }
-
-
 
     private function evalfunction($formuleEvaluated,RecordFormule $formule){
         $res = null;
@@ -146,13 +153,23 @@ class Evaluateur
   private function evalArithmetiquefunction($formuleEvaluated,RecordFormule $formule){
       $use = "use evalLib\\MethodEval;";
       $res=null;
+	  
+       echo "$formuleEvaluated ------------> <br>";
+   //print_r($this->CompEval->_Trace );
+   
+   
       eval("$use;\$res=$formuleEvaluated;");
+      $this->CompEval->_Trace[]=array(
+        "Formule"=>$formuleEvaluated
+          ,"Evaluation"=>$res
+      );
       return $res;
   }
   private function evalLogiqueFunction($formuleEvaluated,RecordFormule $formule){
       $res=null;
 
-
+      //  echo "$formuleEvaluated ------------> <br>";
+   // echo "\$res= $formuleEvaluated;<br>";
       eval("\$res=$formuleEvaluated;");
 
       if($res){
@@ -170,12 +187,18 @@ class Evaluateur
               $res=$resultat['default'];
           }
       }
-
+      //trace de programme
+      $this->CompEval->_Trace[]=array(
+          "Formule"=>$formuleEvaluated
+        ,"Evaluation"=>$res
+      );
       return $res;
   }
   private function evalMixFunction($formuleEvaluated,RecordFormule $formule){
       $use = "use evalLib\\MethodEval;";
       $res=null;
+
+     // echo "$formuleEvaluated ------------> <br>";
       eval("$use;\$res=$formuleEvaluated;");
       if($res){
           $resultat = $formule->getScore();
@@ -192,6 +215,13 @@ class Evaluateur
               $res=$resultat['default'];
           }
       }
+
+      //trace de programme
+      $this->CompEval->_Trace[]=array(
+           "Formule"=>$formuleEvaluated
+          ,"Evaluation"=>$formule
+          ,   "Resultat"=>$res
+      );
       return $res;
   }
 

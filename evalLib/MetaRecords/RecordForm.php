@@ -32,6 +32,23 @@ class RecordForm implements Record
     private $_class;
     private $_name;
     private $_id;
+    private $_Init;
+
+    /**
+     * @return mixed
+     */
+    public function getInit()
+    {
+        return $this->_Init;
+    }
+
+    /**
+     * @param mixed $Init
+     */
+    public function setInit($Init)
+    {
+        $this->_Init = $Init;
+    }
 
     /**
      * @return mixed
@@ -172,13 +189,34 @@ class RecordForm implements Record
         return $tree;
     }
 
-    public function toJson() {}
+    public function toJson() {
+
+
+    }
+
+
+    public function toArray(){
+        $TableCompRecEval['name']=$this->_name;
+        $TableCompRecEval['options']=array(
+            'class'=>$this->_class
+            ,"other"=>$this->_other
+            ,"name"=>$this->_name
+
+        );
+        $TableCompRecEval["label"]=$this->_label;
+        $TableCompRecEval["id"]=$this->_id;
+        $TableCompRecEval["init"]=$this->_Init;
+        return $TableCompRecEval;
+
+    }
+
     public function FromJsonString(string $JsonString){
 
         $JsonDecode = json_decode($JsonString);
         $this->_name=isset($JsonDecode['name']) ? $JsonDecode['name'] : "";
         $this->_label=isset($JsonDecode['label']) ? $JsonDecode['label'] : "";
         $this->_id =isset($JsonDecode['id']) ? $JsonDecode['id'] : "";
+        $this->_Init=isset($JsonDecode['init']) ? $JsonDecode['init'] : "";
         $this->_other=isset($JsonDecode['other']) ? $JsonDecode['other'] : "";
         $this->_class=isset($JsonDecode['class']) ? $JsonDecode['class'] : "";
     }
@@ -187,6 +225,8 @@ class RecordForm implements Record
         $this->_name=isset($JsonDecode['name']) ? $JsonDecode['name'] : "";
         $this->_label=isset($JsonDecode['label']) ? $JsonDecode['label'] : "";
         $this->_id =isset($JsonDecode['id']) ? $JsonDecode['id'] : "";
+        $this->_Init=isset($JsonDecode['init']) ? $JsonDecode['init'] : "";
+
         $this->_other=isset($JsonDecode['other']) ? $JsonDecode['other'] : "";
         $this->_class=isset($JsonDecode['class']) ? $JsonDecode['class'] : "";
     }

@@ -12,9 +12,9 @@ use evalLib\CompEvaluation;
 class ViewGen
 {
         public $CompEval;
-    private $_Model_Exp_Reg=array(
-        "variable"=>"/(\{((@?|#?)[_A-Za-z0-9:]+)+\})/"
-    );
+        private $_Model_Exp_Reg=array(
+            "variable"=>"/(\{((@?|#?)[_A-Za-z0-9:]+)+\})/"
+        );
         public function __construct(CompEvaluation &$CompEval)
         {
             $this->CompEval=$CompEval;
@@ -29,23 +29,26 @@ class ViewGen
                  *
                  */
                 $Liste =$this->CompEval->_Template->getListe();
-                foreach ($Liste as $key => $lg){
-                    $type=$lg->getType();
-                    switch($type){
-                        case "EVAL":
-                            $res=$this->evaluer($lg->getMallocForm());
-                            $this->CompEval->_Template->setIn($key,"liste",$res);
+                if(is_array($Liste)){
+                    foreach ($Liste as $key => $lg){
+                        $type=$lg->getType();
+                        switch($type){
+                            case "EVAL":
+                                $res=$this->evaluer($lg->getMallocForm());
+                                $this->CompEval->_Template->setIn($key,"liste",$res);
 
-                            break;
-                        case "SET":
-                            $res = $this->CompEval->lookForVariable($lg->getMallocForm());
-                            $this->CompEval->_Template->setIn($key,"liste",$res);
+                                break;
+                            case "SET":
+                                $res = $this->CompEval->lookForVariable($lg->getMallocForm());
+                                $this->CompEval->_Template->setIn($key,"liste",$res);
 
-                            break;
-                        case "GET":
-                            break;
+                                break;
+                            case "GET":
+                                break;
+                        }
                     }
                 }
+
 
                 /**
                  *
@@ -63,7 +66,11 @@ class ViewGen
                         case "SET":
                             $res = $this->CompEval->lookForVariable($lg->getMallocForm());
                             $this->CompEval->_Template->setIn($key,"ligne",$res);
-
+                            $this->CompEval->_Trace[]=array(
+                                "Comp"=>"View Template"
+                                ,"Set"=>$key
+                                ,   "Value"=>$res
+                            );
                             break;
                         case "GET":
                             break;
@@ -76,7 +83,7 @@ class ViewGen
         }
 
         public function evaluer($formuleEvaluated){
-         //   echo $formuleEvaluated."<br>";
+             echo $formuleEvaluated."<br>";
             $formule=$formuleEvaluated;
             while (preg_match($this->_Model_Exp_Reg['variable'],$formule,$matches)){
                 if(isset($matches[0]) && !empty($matches[0])){
@@ -92,30 +99,70 @@ class ViewGen
 
             $use = "use evalLib\\MethodEval;";
             $res=null;
-            //echo "\$res=$formule" ;
+            //echo "\$res=$formule</br>" ;
             eval("$use;\$res=$formule;");
+
+            $this->CompEval->_Trace[]=array(
+                "Comp"=>"View Template"
+                ,"Formule"=>$formuleEvaluated
+                ,"Evaluation"=>$formule
+            ,   "Resultat"=>$res
+            );
+
             return $res;
         }
 
         public function genVue($VueTemplate){
             if($this->CompEval->_Template) {
+                $ligne=[];
 
-                /**
-                 *
-                 */
                 $Liste = $this->CompEval->_Template->getListe();
-                foreach ($Liste as $key => $lg) {
-                    $v=$lg->getValue();
-                    $VueTemplate = str_ireplace("{".$key.":@Value}",$v, $VueTemplate);
+                if(is_array($Liste)){
+                    foreach ($Liste as $key => $lg) {
+                        $v=$lg->getValue();
+
+                        $VueTemplate = str_ireplace("{".$key.":@Value}",$v, $VueTemplate);
+                    }
                 }
+
                 $Ligne = $this->CompEval->_Template->getLigne();
                 foreach ($Ligne as $key => $lg) {
                     $v=$lg->getValue();
+
                     $VueTemplate = str_ireplace("{".$key.":@Value}",$v, $VueTemplate);
 
                 }
             }
             return $VueTemplate;
+        }
+
+        public function genLigneArray(){
+            if($this->CompEval->_Template) {
+                $ligne=[];
+
+                $Liste = $this->CompEval->_Template->getListe();
+                if(is_array($Liste)) {
+                    foreach ($Liste as $key => $lg) {
+                        if (!empty($key)) {
+                            $v = $lg->getValue();
+							$v=empty($v) ? "0" : $v;
+                            $L = $lg->getLabel();
+                            $ordre = $lg->getOrdre();
+                            $ligne[$key]=array("Label"=>$L,"Value"=>$v,"name"=>"$key","ordre"=>$ordre);
+                        }
+
+                    }
+                }
+                $Ligne = $this->CompEval->_Template->getLigne();
+                foreach ($Ligne as $key => $lg) {
+                    $v=$lg->getValue();
+					$v=empty($v) ? "0" : $v;
+                    $L=$lg->getLabel();
+                    $ordre=$lg->getOrdre();
+                    $ligne[$key]=array("Label"=>$L,"Value"=>$v,"name"=>"$key","ordre"=>$ordre);
+                }
+            }
+            return $ligne;
         }
 
 }

@@ -82,7 +82,14 @@ class RecordInsert implements Record
     }
 
 
+    public function toArray(){
 
+        $RecordInsert['bind']=$this->_Bind;
+        $RecordInsert['table']=$this->_Table;
+        $RecordInsert['updateCondition']=$this->_UpdateCondition;
+
+        return $RecordInsert;
+    }
     public function toJson() {}
     public function FromJsonString(string $JsonString){}
     public function FromArray($JsonString){}

@@ -11,7 +11,7 @@ namespace gui\index\Controllers;
 use library\mvc\Controller;
 use library\mvc\View;
 
-class index extends Controller
+class composante extends Controller
 {
 
 
